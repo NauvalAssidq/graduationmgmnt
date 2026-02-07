@@ -10,6 +10,13 @@ class WisudawanController extends Controller
 {
     public function index(Request $request)
     {
+        $externalUrl = env('WISUDAWAN_DATA_URL');
+
+        if ($externalUrl) {
+            $response = \Illuminate\Support\Facades\Http::get($externalUrl, $request->all());
+            return response()->json($response->json(), $response->status());
+        }
+
         $query = Wisudawan::with('bukuWisuda');
 
         // Advanced Search / Filter
