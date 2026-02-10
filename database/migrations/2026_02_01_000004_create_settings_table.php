@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_buku_wisuda', function (Blueprint $table) {
-            $table->string('nama')->primary();
-            $table->string('layout');
-            $table->string('style');
+        Schema::create('settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->unique();
+            $table->text('value')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_buku_wisuda');
+        Schema::dropIfExists('settings');
     }
 };

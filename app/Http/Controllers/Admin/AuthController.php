@@ -8,16 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    // tampilan login
     public function showLogin()
     {
         return view('admin.auth.login');
     }
 
+    // fungsi dan validasi login
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => ['required', 'email'], // Required email berarti email harus mengandung karakter @
+            'password' => ['required'], // Required password berarti password harus diisi
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -26,10 +28,11 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
 
+    // fungsi logout
     public function logout(Request $request)
     {
         Auth::logout();

@@ -28,6 +28,6 @@ class Wisudawan extends Model
 
     public function bukuWisuda()
     {
-        return $this->belongsTo(BukuWisuda::class, 'id_buku');
+        return $this->belongsTo(BukuWisuda::class, 'id_buku'); // relasi ke buku wisuda many to one
     }
 }

@@ -51,4 +51,11 @@ class PublicController extends Controller
         $graduates = $book->wisudawan()->paginate(20);
         return view('book_detail', compact('book', 'graduates'));
     }
+    public function flipbook(BukuWisuda $book)
+    {
+        if (!$book->file_pdf) {
+            abort(404);
+        }
+        return view('flipbook', compact('book'));
+    }
 }

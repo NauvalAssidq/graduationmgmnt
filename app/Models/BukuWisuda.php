@@ -11,6 +11,7 @@ class BukuWisuda extends Model
 
     protected $table = 'buku_wisuda';
 
+    // fillable yang diisi di form create
     protected $fillable = [
         'nama_buku',
         'slug',
@@ -22,6 +23,7 @@ class BukuWisuda extends Model
         'file_pdf',
     ];
 
+    // pembuatan slug otomatis dari nama buku
     public function getRouteKeyName()
     {
         return 'slug';

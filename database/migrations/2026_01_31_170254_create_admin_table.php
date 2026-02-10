@@ -19,6 +19,8 @@ return new class extends Migration
         });
     }
 
+    // Membuat tabel admin dengan kolom berupa id, email, password, dan timestamps
+
     /**
      * Reverse the migrations.
      */

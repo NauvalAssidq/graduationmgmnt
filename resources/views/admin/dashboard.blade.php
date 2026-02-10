@@ -59,6 +59,42 @@
         </button>
     </div>
 
+    <!-- Filter Row -->
+    <div class="mb-6">
+        <form method="GET" action="{{ route('admin.dashboard') }}" class="w-full">
+            <div class="bg-white p-4 rounded-xl border border-gray-300 shadow-sm flex items-center gap-4">
+                <svg class="w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                <span class="text-sm font-semibold text-slate-600 shrink-0">Filter:</span>
+                <div class="w-48">
+                    <x-select 
+                        name="tahun" 
+                        placeholder="Semua Tahun"
+                        :options="$tahunList->mapWithKeys(fn($t) => [$t => $t])" 
+                        :value="$selectedTahun"
+                        :submitOnChange="true"
+                    />
+                </div>
+                <div class="w-48">
+                    <x-select 
+                        name="gelombang" 
+                        placeholder="Semua Gelombang"
+                        :options="$gelombangList->mapWithKeys(fn($g) => [$g => 'Gelombang ' . $g])" 
+                        :value="$selectedGelombang"
+                        :submitOnChange="true"
+                    />
+                </div>
+                <div class="ml-auto flex items-center gap-3 shrink-0">
+                    @if($selectedTahun || $selectedGelombang)
+                        <a href="{{ route('admin.dashboard') }}" class="text-xs text-red-500 hover:text-red-700 font-medium underline transition-colors">Reset Filter</a>
+                    @endif
+                    <span class="text-xs text-slate-400 font-medium">
+                        {{ ($selectedTahun || $selectedGelombang) ? 'Memfilter data...' : 'Menampilkan semua data' }}
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- Quick Stats Row -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Stat Card 1 -->
@@ -106,14 +142,61 @@
         </div>
     </div>
 
+
+
     <!-- Charts Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8" x-data="{ showFacultyModal: false }">
         
         <!-- Main Chart (Bar) -->
         <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-300 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-800 mb-6">Distribusi per Fakultas</h3>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Distribusi per Fakultas</h3>
+                <button @click="showFacultyModal = true" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium hover:underline">
+                    Lihat Detail
+                </button>
+            </div>
             <div class="relative h-[300px] w-full">
                 <canvas id="facultyChart"></canvas>
+            </div>
+
+            <!-- Faculty Detail Modal -->
+            <div x-show="showFacultyModal" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                <div x-show="showFacultyModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+                <div class="fixed inset-0 z-10 overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div x-show="showFacultyModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" @click.away="showFacultyModal = false" class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                <div class="sm:flex sm:items-start">
+                                    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                                        <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">Detail Distribusi Fakultas</h3>
+                                        <div class="mt-4 max-h-96 overflow-y-auto">
+                                            <table class="min-w-full divide-y divide-gray-300">
+                                                <thead class="bg-gray-50">
+                                                    <tr>
+                                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Fakultas</th>
+                                                        <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Jumlah</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="divide-y divide-gray-200 bg-white">
+                                                    @foreach($graduatesByFaculty as $faculty => $count)
+                                                        <tr>
+                                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $faculty }}</td>
+                                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ $count }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                <button type="button" @click="showFacultyModal = false" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -194,5 +277,7 @@
                 }
             }
         });
+
+
     </script>
 @endsection

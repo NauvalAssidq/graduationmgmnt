@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/cari-alumni', [PublicController::class, 'search'])->name('cari.alumni');
 Route::get('/buku/{book}', [PublicController::class, 'showBook'])->name('buku.show');
+Route::get('/buku/{book}/flipbook', [PublicController::class, 'flipbook'])->name('buku.flipbook');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -35,5 +36,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     
     // Kelola Arsip
     Route::get('/arsip', [ArsipController::class, 'index'])->name('admin.arsip.index');
+    Route::get('/arsip/preview/{id}', [ArsipController::class, 'printPreview'])->name('admin.arsip.preview');
     Route::post('/arsip/generate/{id}', [ArsipController::class, 'generatePdf'])->name('admin.arsip.generate');
+
+    // Pengaturan
+    Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
 });

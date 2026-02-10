@@ -23,6 +23,10 @@ return new class extends Migration
         });
     }
 
+    // Membuat tabel personal_access_tokens dengan kolom berupa id, tokenable, name, token, abilities, last_used_at, expires_at, dan timestamps
+    // tokenable adalah relasi ke tabel lain
+    
+
     /**
      * Reverse the migrations.
      */

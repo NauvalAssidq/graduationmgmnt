@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 use App\Models\BukuWisuda;
 use App\Models\Wisudawan;
+use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class WisudawanSeeder extends Seeder
 {
@@ -18,78 +16,42 @@ class WisudawanSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        // Ensure a Book exists
-        $buku = BukuWisuda::first();
-        if (!$buku) {
-            $buku = BukuWisuda::create([
-                'nama_buku' => 'Wisuda Gelombang I Tahun 2026',
-                'tanggal_terbit' => '2026-03-15',
-                'gelombang' => 'I',
-                'tahun' => '2026',
-                'status' => 'Aktif',
-                'file_pdf' => null
-            ]);
-        }
+        $apiData = [];
+        $totalStudents = 150;
 
         $faculties = [
-            'Fakultas Syariah dan Hukum' => [
-                'Hukum Keluarga', 'Hukum Ekonomi Syariah', 'Perbandingan Mazhab', 'Hukum Tata Negara', 'Hukum Pidana Islam'
-            ],
-            'Fakultas Tarbiyah dan Keguruan' => [
-                'Pendidikan Agama Islam', 'Pendidikan Bahasa Arab', 'Manajemen Pendidikan Islam', 
-                'Pendidikan Matematika', 'Pendidikan Bahasa Inggris', 'Pendidikan Kimia', 'Pendidikan Fisika'
-            ],
-            'Fakultas Ushuluddin dan Filsafat' => [
-                'Aqidah dan Filsafat Islam', 'Sosiologi Agama', 'Ilmu Al-Quran dan Tafsir', 'Studi Agama-Agama'
-            ],
-            'Fakultas Dakwah dan Komunikasi' => [
-                'Komunikasi dan Penyiaran Islam', 'Bimbingan dan Konseling Islam', 'Manajemen Dakwah', 'Pengembangan Masyarakat Islam'
-            ],
-            'Fakultas Adab dan Humaniora' => [
-                'Sejarah dan Kebudayaan Islam', 'Bahasa dan Sastra Arab', 'Ilmu Perpustakaan'
-            ],
-            'Fakultas Ekonomi dan Bisnis Islam' => [
-                'Ekonomi Syariah', 'Perbankan Syariah', 'Ilmu Ekonomi', 'Akuntansi Syariah'
-            ],
-            'Fakultas Sains dan Teknologi' => [
-                'Teknologi Informasi', 'Arsitektur', 'Kimia', 'Biologi', 'Teknik Lingkungan', 'Sistem Informasi'
-            ],
+            'Fakultas Syariah dan Hukum' => ['Hukum Keluarga', 'Hukum Ekonomi Syariah', 'Perbandingan Mazhab', 'Hukum Tata Negara'],
+            'Fakultas Tarbiyah dan Keguruan' => ['Pendidikan Agama Islam', 'Pendidikan Bahasa Arab', 'Manajemen Pendidikan Islam', 'Pendidikan Matematika', 'Pendidikan Bahasa Inggris'],
+            'Fakultas Ushuluddin dan Filsafat' => ['Aqidah dan Filsafat Islam', 'Sosiologi Agama', 'Ilmu Al-Quran dan Tafsir'],
+            'Fakultas Dakwah dan Komunikasi' => ['Komunikasi dan Penyiaran Islam', 'Bimbingan dan Konseling Islam', 'Manajemen Dakwah'],
+            'Fakultas Adab dan Humaniora' => ['Sejarah dan Kebudayaan Islam', 'Bahasa dan Sastra Arab', 'Ilmu Perpustakaan'],
+            'Fakultas Ekonomi dan Bisnis Islam' => ['Ekonomi Syariah', 'Perbankan Syariah', 'Ilmu Ekonomi'],
+            'Fakultas Sains dan Teknologi' => ['Teknologi Informasi', 'Arsitektur', 'Kimia', 'Biologi', 'Teknik Lingkungan'],
             'Fakultas Psikologi' => ['Psikologi'],
             'Fakultas Ilmu Sosial dan Ilmu Pemerintahan' => ['Ilmu Politik', 'Ilmu Administrasi Negara'],
         ];
 
         $thesisTopics = [
-            'Hukum' => ['Analisis Hukum Waris', 'Tinjauan Fiqih Muamalah terhadap', 'Perlindungan Konsumen dalam Perspektif', 'Sanksi Pidana Islam terhadap'],
-            'Pendidikan' => ['Pengaruh Metode Pembelajaran', 'Efektivitas Media', 'Hubungan Motivasi dan Prestasi', 'Strategi Guru PAI dalam'],
-            'Dakwah' => ['Strategi Komunikasi Dakwah', 'Pola Pembinaan Remaja', 'Peran Masjid dalam', 'Dinamika Sosial Keagamaan'],
-            'Ekonomi' => ['Analisis Kinerja Keuangan', 'Pengaruh Inflasi terhadap', 'Strategi Pemasaran Syariah', 'Peran UMKM dalam'],
-            'Teknologi' => ['Rancang Bangun Sistem Informasi', 'Penerapan Algoritma', 'Sistem Pendukung Keputusan', 'Analisis Keamanan Jaringan'],
-            'Psikologi' => ['Hubungan Kecerdasan Emosional dengan', 'Stres Kerja pada', 'Dukungan Sosial dan', 'Resiliensi pada'],
-            'Umum' => ['Implementasi Kebijakan', 'Peran Pemerintah Daerah', 'Partisipasi Masyarakat dalam', 'Evaluasi Program']
+            'Hukum' => ['Analisis Hukum Waris', 'Tinjauan Fiqih Muamalah', 'Perlindungan Konsumen'],
+            'Pendidikan' => ['Pengaruh Metode Pembelajaran', 'Efektivitas Media', 'Hubungan Motivasi'],
+            'Dakwah' => ['Strategi Komunikasi', 'Pola Pembinaan Remaja', 'Peran Masjid'],
+            'Ekonomi' => ['Analisis Kinerja Keuangan', 'Pengaruh Inflasi', 'Strategi Pemasaran'],
+            'Teknologi' => ['Rancang Bangun Sistem', 'Penerapan Algoritma', 'Sistem Pendukung Keputusan'],
+            'Psikologi' => ['Hubungan Kecerdasan Emosional', 'Stres Kerja', 'Dukungan Sosial'],
+            'Umum' => ['Implementasi Kebijakan', 'Peran Pemerintah', 'Partisipasi Masyarakat']
         ];
 
-        // Islamic Name Components to mix with Faker
-        $islamicPrefixesM = ['Muhammad', 'Ahmad', 'Abdul', 'Zainal', 'Fajri', 'Ilham', 'Rahmat'];
-        $islamicPrefixesF = ['Siti', 'Nur', 'Aisyah', 'Fatimah', 'Zahra', 'Putri', 'Wardah'];
-        
-        $graduates = [];
-
-        for ($i = 1; $i <= 100; $i++) {
-            // Pick Faculty and Prodi
+        for ($i = 1; $i <= $totalStudents; $i++) {
             $facultyName = $faker->randomElement(array_keys($faculties));
-            $prodiList = $faculties[$facultyName];
-            $prodiName = $faker->randomElement($prodiList);
-
-            // Gender
+            $prodiName = $faker->randomElement($faculties[$facultyName]);
             $gender = $faker->randomElement(['L', 'P']);
             
-            // Name Generation
-            $firstName = $gender == 'L' 
-                ? $faker->randomElement($islamicPrefixesM) 
-                : $faker->randomElement($islamicPrefixesF);
-            $fullName = $firstName . ' ' . $faker->lastName . ' ' . ($faker->boolean(40) ? $faker->lastName : '');
+            $waveConfig = $faker->randomElement([
+                ['gelombang' => '1', 'tahun' => '2025'],
+                ['gelombang' => '2', 'tahun' => '2025'],
+                ['gelombang' => '1', 'tahun' => '2026'],
+            ]);
 
-            // Thesis Generation logic based on Faculty keywords
             $topicKey = 'Umum';
             if (str_contains($facultyName, 'Hukum') || str_contains($facultyName, 'Syariah')) $topicKey = 'Hukum';
             elseif (str_contains($facultyName, 'Tarbiyah')) $topicKey = 'Pendidikan';
@@ -98,42 +60,65 @@ class WisudawanSeeder extends Seeder
             elseif (str_contains($facultyName, 'Teknologi')) $topicKey = 'Teknologi';
             elseif (str_contains($facultyName, 'Psikologi')) $topicKey = 'Psikologi';
 
-            $prefix = $faker->randomElement($thesisTopics[$topicKey]);
-            $suffix = $faker->words(4, true);
-            $location = $faker->city;
-            $thesisTitle = "$prefix $suffix di $location";
+            $thesis = $faker->randomElement($thesisTopics[$topicKey]) . ' ' . $faker->words(3, true) . ' di ' . $faker->city;
 
-            // IPK & Yudisium
-            $ipk = $faker->randomFloat(2, 3.00, 3.99);
-            $yudisium = 'Sangat Baik';
-            if ($ipk >= 3.75) $yudisium = 'Cumlaude'; // or Pujian often used
-            elseif ($ipk >= 3.50) $yudisium = 'Pujian'; // or Sangat Baik
-            else $yudisium = 'Baik';
-
-            $graduates[] = [
-                'id_buku' => $buku->id,
-                'nama' => strtoupper($fullName),
-                'nim' => '20' . $faker->numerify('#######'), // 20xxxxxxx (approx Year 2020 entry)
-                'nomor' => str_pad($i, 3, '0', STR_PAD_LEFT),
-                'ttl' => strtoupper($faker->city . ', ' . $faker->date('d F Y', '2003-12-31')),
+            $apiData[] = [
+                'nim' => '200' . $faker->unique()->numberBetween(1000000, 9999999),
+                'nama' => $faker->name($gender == 'L' ? 'male' : 'female'),
+                'nomor_ijazah' => $faker->regexify('[0-9]{4}/UN\.08/DT\.III\.00\.00/[0-9]{4}'),
+                'ttl' => $faker->city . ', ' . $faker->date('d F Y', '2003-01-01'),
                 'jenis_kelamin' => $gender,
-                'prodi' => trim(str_replace('Fakultas', '', $facultyName)) . " - " . $prodiName, // Just formatting preference
                 'prodi' => $prodiName,
                 'fakultas' => $facultyName,
-                'ipk' => $ipk,
-                'ka_yudisium' => $yudisium,
-                'judul_thesis' => ucwords($thesisTitle),
-                'foto' => '', // Empty string since column is not nullable
-                'created_at' => now(),
-                'updated_at' => now(),
+                'ipk' => $faker->randomFloat(2, 3.00, 4.00),
+                'yudisium' => $faker->randomElement(['Pujian', 'Sangat Memuaskan']),
+                'judul_skripsi' => ucwords($thesis),
+                'gelombang' => $waveConfig['gelombang'],
+                'tahun' => $waveConfig['tahun'],
             ];
         }
+
+        $this->command->info("Memulai sinkronisasi data dari API. Total data: " . count($apiData));
         
-        // Sort by Faculty and Prodi for realistic ordering usually
-        // But mass insert is fine.
-        
-        foreach (array_chunk($graduates, 50) as $chunk) {
-            Wisudawan::insert($chunk);
+        $booksCache = [];
+        $insertedCount = 0;
+
+        foreach ($apiData as $student) {
+            $gelombang = $student['gelombang'];
+            $tahun = $student['tahun'];
+            $bookKey = "{$gelombang}-{$tahun}";
+
+            if (!isset($booksCache[$bookKey])) {
+                $book = BukuWisuda::firstOrCreate(
+                    ['gelombang' => $gelombang, 'tahun' => $tahun],
+                    [
+                        'nama_buku' => "Wisuda Gelombang $gelombang Tahun $tahun",
+                        'tanggal_terbit' => now(),
+                        'status' => 'Draft',
+                        'slug' => \Illuminate\Support\Str::slug("Wisuda Gelombang $gelombang Tahun $tahun"),
+                        'file_pdf' => null
+                    ]
+                );
+                $booksCache[$bookKey] = $book->id;
+            }
+
+            Wisudawan::create([
+                'id_buku' => $booksCache[$bookKey],
+                'nim' => $student['nim'],
+                'nama' => $student['nama'],
+                'nomor' => $student['nomor_ijazah'],
+                'ttl' => $student['ttl'],
+                'jenis_kelamin' => $student['jenis_kelamin'],
+                'prodi' => $student['prodi'],
+                'fakultas' => $student['fakultas'],
+                'ipk' => $student['ipk'],
+                'ka_yudisium' => $student['yudisium'],
+                'judul_thesis' => $student['judul_skripsi'],
+                'foto' => '',
+            ]);
+            $insertedCount++;
         }
+
+        $this->command->info("Sinkronisasi API Selesai: {$insertedCount} mahasiswa berhasil ditambahkan ke dalam buku wisuda.");
     }
 }

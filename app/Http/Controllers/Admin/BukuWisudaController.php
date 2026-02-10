@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class BukuWisudaController extends Controller
 {
+    // tampilan halaman list buku wisuda
     public function index(Request $request)
     {
         $query = BukuWisuda::query()
@@ -50,6 +51,7 @@ class BukuWisudaController extends Controller
         return view('admin.buku_wisuda.index', compact('books', 'years'));
     }
 
+    // tampilan halaman create buku wisuda
     public function create()
     {
         $templates = TemplateBukuWisuda::all();
@@ -75,8 +77,9 @@ class BukuWisudaController extends Controller
 
         BukuWisuda::create($validated);
         return redirect()->route('buku-wisuda.index')->with('success', 'Buku Wisuda berhasil dibuat.');
-    }
+    } // end creation
 
+    // tampilan halaman edit buku wisuda
     public function edit(BukuWisuda $bukuWisuda)
     {
         $templates = TemplateBukuWisuda::all();
@@ -102,7 +105,7 @@ class BukuWisudaController extends Controller
 
         $bukuWisuda->update($validated);
         return redirect()->route('buku-wisuda.index')->with('success', 'Buku Wisuda berhasil diperbarui.');
-    }
+    } // end update (edit)
 
     public function destroy(BukuWisuda $bukuWisuda)
     {

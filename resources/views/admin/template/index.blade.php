@@ -224,14 +224,29 @@
                         }
                         .a4-page, .sheet {
                             width: ${width};
+                            height: ${height}; /* FIXED height - matches actual A4 */
                             min-height: ${height};
+                            max-height: ${height};
                             background: white;
                             padding: 2.5cm;
                             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
                             position: relative;
                             color: black;
                             flex-shrink: 0;
-                            box-sizing: border-box; /* IMPORTANT: Includes padding in width */
+                            box-sizing: border-box;
+                            overflow: hidden; /* Clip overflow to show accurate boundaries */
+                        }
+                        /* Visual indicator for overflow - red border when content is clipped */
+                        .a4-page::after, .sheet::after {
+                            content: "";
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            height: 3px;
+                            background: linear-gradient(to right, transparent, #ef4444, transparent);
+                            opacity: 0;
+                            pointer-events: none;
                         }
                         /* User Custom CSS */
                         ${customCss}

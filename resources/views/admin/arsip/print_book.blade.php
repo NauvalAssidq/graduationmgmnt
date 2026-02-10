@@ -16,74 +16,147 @@
             
             /* PDF Overrides */
             * { box-sizing: border-box !important; }
-            html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #ffffff; }
+            html, body { 
+                margin: 0; 
+                padding: 0; 
+                width: 210mm; 
+                background: #ffffff; 
+            }
+            
+            /* Pages - overflow goes to next page */
             .a4-page, .sheet { 
                 width: 210mm !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
-                background: #ffffff; 
-                position: relative; 
-                page-break-after: always; 
-            }
-            
-            /* Fixed Cover/Front Matter Pages */
-            .template-page {
-                height: 297mm !important; 
-                overflow: hidden; 
-            }
-            
-            /* Flowing Data Pages */
-            .listing-page {
-                height: auto !important; 
                 min-height: 297mm;
-                overflow: visible; 
+                height: auto; /* Allow overflow to next page */
+                margin: 0 !important; 
+                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important; /* Top Right Bottom Left */
+                background: #ffffff; 
+                position: relative;
+                box-sizing: border-box !important;
+                overflow: visible;
             }
-            .content-padding { padding: 2.5cm !important; }
-            .fixed-height { height: 297mm !important; overflow: hidden; }
+            
+            /* Cover page - fixed height, no padding */
+            .a4-page.center { 
+                padding: 0 !important;
+                height: 297mm !important;
+                overflow: hidden;
+            }
+            
+            /* SK Rektor page - reduced 1cm padding */
+            .a4-page.sk-page, .sk-page {
+                padding: 1cm !important;
+            }
+            
+            /* Page breaks between pages */
+            .a4-page + .a4-page, .sheet + .sheet, .a4-page + .sheet, .sheet + .a4-page {
+                page-break-before: always;
+            }
+            
+            /* Force background colors */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
             img { max-width: 100%; }
-            .page-break { page-break-after: always; }
         </style>
     @else
         <script src="https://cdn.tailwindcss.com"></script>
     @endif
     <style>
         @media print {
+            /* Force borderless printing - remove ALL browser margins */
             @page { 
-                margin: 0mm; 
-                size: A4 portrait; 
+                margin: 0mm !important; 
+                padding: 0mm !important;
+                size: 210mm 297mm; /* Explicit A4 size */
             }
-            body { 
-                background: white !important; /* Ensure default bg is white */
+            
+            /* First page - no margin needed */
+            @page :first {
+                margin: 0mm !important;
+            }
+            
+            html, body { 
+                background: white !important;
+                background-color: white !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 210mm !important;
+                height: 100% !important;
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
                 color-adjust: exact !important; 
             }
+            
+            /* Remove tailwind gray bg class */
+            .bg-gray-100 { background-color: white !important; }
+            
             .no-print { display: none !important; }
             
-            /* Enforce A4 dimensions on print */
+            /* 
+             * Pages with content padding - overflow goes to next page
+             */
             .a4-page, .sheet { 
-                width: 210mm;
-                height: 297mm; 
+                width: 210mm !important;
+                min-height: 297mm !important;
+                height: auto !important; /* Allow page to expand for overflow */
                 margin: 0 !important; 
-                padding: 2cm !important; /* Fixed standard padding */
+                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important; /* Top Right Bottom Left - consistent margins */
+                background: white !important;
                 background-color: white !important;
                 box-shadow: none !important; 
-                page-break-after: always !important; 
-                break-after: page !important;
-                overflow: hidden;
                 position: relative;
                 border: none !important;
+                display: block !important;
+                box-sizing: border-box !important;
+                overflow: visible !important; /* Let content flow to next page */
+                page-break-inside: auto; /* Allow page breaks inside if content is long */
             }
-            .a4-page:last-child, .sheet:last-child {
-                page-break-after: auto !important;
-                break-after: auto !important;
+            
+            /* Cover page with decorative bars at edges needs no padding */
+            .a4-page.center { 
+                padding: 0 !important;
+                height: 297mm !important; /* Cover page is exactly one page */
+                overflow: hidden !important;
+            }
+            
+            /* SK Rektor page - reduced 1cm padding to fit single page */
+            .a4-page.sk-page, .sk-page {
+                padding: 1cm !important;
+            }
+            
+            /* Separator pages (Fakultas covers) - need background support */
+            .a4-page.sheet[style*="background-color"] {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* Page breaks between pages */
+            .a4-page + .a4-page, .sheet + .sheet, .a4-page + .sheet, .sheet + .a4-page {
+                page-break-before: always;
             }
 
-            /* Force background colors on specific elements if needed */
-            .bg-emerald-700, .bg-emerald-800, .bg-gray-100, .bg-gray-50, .bg-amber-400 {
+            /* FORCE ALL BACKGROUND COLORS TO PRINT (including inline styles) */
+            * {
                 -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            /* Specific Tailwind classes for print */
+            .bg-emerald-700, .bg-emerald-800, .bg-gray-50, .bg-amber-400, .bg-uin-green, .bg-uin-gold, 
+            .bg-gray-100, .bg-slate-100, .bg-green-700, .bg-yellow-400 {
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+            }
+            
+            /* Force Separator Page Green Background */
+            .separator-page {
+                background-color: #047857 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
         }
@@ -101,10 +174,12 @@
                 min-height: 297mm;
                 margin: 0 auto 2rem auto !important; /* Forced visual separation */
                 background: white;
-                padding: 20mm;
+                padding: 2.5cm; /* Match template preview */
+                box-sizing: border-box;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
                 position: relative;
             }
+            .a4-page.center { padding: 0; }
             /* Visual page separator line */
             .a4-page::after, .sheet::after {
                 content: "";
@@ -123,7 +198,7 @@
         @endif
     </style>
 </head>
-<body class="bg-gray-100 font-serif antialiased">
+<body class="font-serif antialiased">
 
     @if(!isset($isPdf) || !$isPdf)
     <!-- Floating Print Button -->
@@ -176,8 +251,8 @@
                 foreach($prodis as $prodi => $grads) {
                     $prodiStart = $runningPage;
                     $count = $grads->count();
-                    // Each listing page holds 4 graduates now (List View)
-                    $listingPages = ceil($count / 4);
+                    // Each listing page holds 3 graduates max (to prevent overflow)
+                    $listingPages = ceil($count / 3);
                     // Total pages for this prodi segment = 1 (Separator Page) + Listing Pages
                     $totalPages = 1 + ($listingPages > 0 ? $listingPages : 0); 
                     
@@ -203,46 +278,64 @@
                 $content = $pages[$i+1] ?? '';
                 
                 // --- 1. TOC INJECTION ---
-                if (stripos($content, 'DAFTAR ISI') !== false) {
+                // Use strict check to avoid matching HTML comments (e.g. <!-- DAFTAR ISI -->) which belong to previous page
+                if (preg_match('/>\s*DAFTAR ISI/i', $content)) {
                     
-                     // A. Build Dynamic List HTML
-                     $dynamicList = '';
+                     // A. Build Dynamic List entries as array
+                     $tocEntries = [];
                      $fC = 1;
                      foreach($tocData as $data) {
-                        $dynamicList .= '<div class="toc-row" style="padding-left: 20px; margin-bottom: 4px;"><span class="toc-label">'. $fC . '. ' . $data['faculty'] .'</span><span class="toc-dots" style="border-bottom: 1px dotted #000; flex-grow: 1; margin: 0 5px;"></span><span class="toc-page">'. $data['page'] .'</span></div>';
+                        // Faculty row
+                        $tocEntries[] = '<div class="toc-row" style="padding-left: 20px; margin-bottom: 4px;"><span class="toc-label">'. $fC . '. ' . $data['faculty'] .'</span><span class="toc-dots" style="border-bottom: 1px dotted #000; flex-grow: 1; margin: 0 5px;"></span><span class="toc-page">'. $data['page'] .'</span></div>';
                         
+                        // Prodi rows
                         foreach($data['prodis'] as $pData) {
-                              $dynamicList .= '<div class="toc-row" style="padding-left: 40px; margin-bottom: 2px; font-style: italic; font-size: 11pt;"><span class="toc-label">- '. $pData['name'] .'</span><span class="toc-dots" style="border-bottom: 1px dotted #000; flex-grow: 1; margin: 0 5px;"></span><span class="toc-page">'. $pData['page'] .'</span></div>';
+                              $tocEntries[] = '<div class="toc-row" style="padding-left: 40px; margin-bottom: 2px; font-style: italic; font-size: 11pt;"><span class="toc-label">- '. $pData['name'] .'</span><span class="toc-dots" style="border-bottom: 1px dotted #000; flex-grow: 1; margin: 0 5px;"></span><span class="toc-page">'. $pData['page'] .'</span></div>';
                         }
                         $fC++;
                      }
                      
-                     // B. CLEANUP STATIC ITEMS
-                     // Strategy: Remove ANY <div class="toc-row"> that is NOT a Header ("Sambutan", "SK", "Daftar Lulusan").
-                     // This clears old faculties AND prodis.
+                     // B. PAGINATE: Split into pages (~22 entries per page to fit with header)
+                     $entriesPerPage = 22;
+                     $tocPages = array_chunk($tocEntries, $entriesPerPage);
+                     
+                     // C. CLEANUP STATIC ITEMS
                      $content = preg_replace_callback('/<div class="toc-row".*?>.*?<\/div>/si', function($matches) {
                          $row = $matches[0];
-                         // Keep Headers (Case Insensitive checks)
                          if (stripos($row, 'SAMBUTAN') !== false) return $row;
                          if (stripos($row, 'SK REKTOR') !== false) return $row;
-                         if (stripos($row, 'DAFTAR LULUSAN') !== false) return $row; // The Header itself
-                         
-                         return ''; // Remove everything else (Static Items)
+                         if (stripos($row, 'DAFTAR LULUSAN') !== false) return $row;
+                         return '';
                      }, $content);
 
-                     // C. INJECT DYNAMIC LIST
-                     // Find the "DAFTAR LULUSAN" header again (it should be preserved)
-                     $marker = 'DAFTAR LULUSAN FAKULTAS';
+                     // D. BUILD PAGINATED HTML
+                     $dynamicList = implode('', $tocPages[0] ?? []); // First page entries
+                     
+                     // Create additional TOC pages if needed
+                     $additionalPages = '';
+                     for ($p = 1; $p < count($tocPages); $p++) {
+                         $pageNum = $pNum + $p; // Track page number
+                         $additionalPages .= '<div class="a4-page sheet font-serif" style="padding: 2.5cm 2.5cm 2.5cm 2.5cm;">';
+                         $additionalPages .= '<div style="font-size: 12pt;">'; // Content wrapper
+                         $additionalPages .= '<div class="toc-row bold" style="margin-bottom: 15px;"><span>DAFTAR LULUSAN (lanjutan)</span></div>';
+                         $additionalPages .= implode('', $tocPages[$p]);
+                         $additionalPages .= '</div></div>';
+                     }
+                     
+                     // E. INJECT DYNAMIC LIST into first page
+                     $marker = 'DAFTAR LULUSAN';
                      $markerPos = stripos($content, $marker);
                      
                      if ($markerPos !== false) {
-                         // Find insertion point after this header's closing div
                          $closeDivPos = stripos($content, '</div>', $markerPos);
                          if ($closeDivPos !== false) {
                              $insertionPoint = $closeDivPos + 6; 
                              $content = substr_replace($content, $dynamicList, $insertionPoint, 0);
                          }
                      }
+                     
+                     // F. Append additional pages at the end of this page
+                     $content .= $additionalPages;
                 }
 
                 // --- 2. PAGINATION INJECTION ---
@@ -294,7 +387,7 @@
     @foreach($groupedGrads as $faculty => $prodis)
         @foreach($prodis as $prodi => $grads)
              <!-- SEPARATOR PAGE -->
-             <div class="a4-page sheet font-serif center" style="display: flex; flex-direction: column; justify-content: center; background-color: #047857; color: white; page-break-before: always; page-break-after: always; position:relative;">
+             <div class="a4-page sheet font-serif center separator-page" style="display: flex; flex-direction: column; justify-content: center; background-color: #047857 !important; color: white !important; position:relative;">
                 <div style="border: 5px solid #fbbf24; padding: 2cm; margin: 1cm;">
                     <h3 style="font-size: 16pt; margin-bottom: 10px;">DAFTAR LULUSAN</h3>
                     <h1 class="bold" style="font-size: 28pt; margin: 0; line-height: 1.2; text-transform: uppercase;">{{ $faculty }}</h1>
@@ -304,7 +397,7 @@
             </div>
         
             <!-- LISTING PAGE -->
-            <div class="a4-page sheet page-break {{ isset($isPdf) && $isPdf ? 'content-padding listing-page' : '' }}" style="page-break-before: always;">
+            <div class="a4-page sheet page-break {{ isset($isPdf) && $isPdf ? 'content-padding listing-page' : '' }}">
                 <h3 class="text-center font-bold text-xl uppercase mb-8 pb-4 border-b border-gray-300">
                     {{ $faculty }} <br> <span class="text-base text-gray-600">{{ $prodi }}</span>
                 </h3>
@@ -436,9 +529,9 @@
                     </div>
                 @endif
         
-                    <!-- Manual Page Break Logic (approx 4 students per page to be safe with this detailed layout) -->
-                    @if((!isset($isPdf) || !$isPdf) && $loop->iteration % 4 == 0 && !$loop->last)
-                        </div></div><div class="a4-page sheet page-break"><div class="space-y-6 pt-8">
+                    <!-- Page Break Logic: 3 students per page max (applies to ALL modes) -->
+                    @if($loop->iteration % 3 == 0 && !$loop->last)
+                        </div></div><div class="a4-page sheet page-break"><div class="space-y-6" style="padding-top: 0;">
                     @endif
                 @endforeach
                 </div>

@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Route;
 
 class WisudawanController extends Controller
 {
+    // daftar wisudawan dengan index, yang berisi filter dan pagination
     public function index(Request $request)
     {
+        // implementasi API dengan route api.wisudawan.index atau api lainnya sesuai dengan link
         $proxy = Request::create(route('api.wisudawan.index'), 'GET', $request->all());
         
         $response = Route::dispatch($proxy);
@@ -48,6 +50,7 @@ class WisudawanController extends Controller
         return view('admin.wisudawan.index', compact('graduates', 'faculties', 'prodis', 'predikats'));
     }
 
+    // create wisudawan dan data stream nya
     public function create()
     {
         $books = BukuWisuda::where('status', '!=', 'Archived')->get();
@@ -80,6 +83,7 @@ class WisudawanController extends Controller
         return redirect()->route('wisudawan.index')->with('success', 'Data wisudawan berhasil ditambahkan.');
     }
 
+    //edit wisudawan dengan data streamnya
     public function edit(Wisudawan $wisudawan)
     {
         $books = BukuWisuda::where('status', '!=', 'Archived')->get();
@@ -121,43 +125,24 @@ class WisudawanController extends Controller
         return redirect()->route('wisudawan.index')->with('success', 'Data wisudawan berhasil dihapus.');
     }
 
+    // deprecated, fungsi ini tidak digunakan
     public function import(Request $request)
     {
         $request->validate([
-            'file_csv' => 'required|mimes:csv,txt|max:5048',
-            'id_buku' => 'required|exists:buku_wisuda,id',
+            'file_csv' => 'required|mimes:csv,txt,xlsx,xls|max:5048',
+            'gelombang' => 'required|string',
+            'tahun' => 'required|string|digits:4',
         ]);
 
-        $file = $request->file('file_csv');
-        $bukuId = $request->id_buku;
-
-        $handle = fopen($file->getRealPath(), 'r');
-        $header = fgetcsv($handle, 1000, ',');
-
-        $count = 0;
-        while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-            try {
-                Wisudawan::create([
-                    'id_buku' => $bukuId,
-                    'nim' => $row[0] ?? null,
-                    'nama' => $row[1] ?? null,
-                    'nomor' => $row[2] ?? '-',
-                    'ttl' => $row[3] ?? '-',
-                    'jenis_kelamin' => $row[4] ?? 'L',
-                    'prodi' => $row[5] ?? '-',
-                    'fakultas' => $row[6] ?? '-',
-                    'ipk' => isset($row[7]) ? floatval($row[7]) : 0.0,
-                    'ka_yudisium' => $row[8] ?? '-',
-                    'judul_thesis' => $row[9] ?? '-',
-                    'foto' => null, 
-                ]);
-                $count++;
-            } catch (\Exception $e) {
-                continue;
-            }
+        try {
+            \Maatwebsite\Excel\Facades\Excel::import(
+                new \App\Imports\WisudawanImport($request->input('gelombang'), $request->input('tahun')),
+                $request->file('file_csv')
+            );
+            
+            return redirect()->route('wisudawan.index')->with('success', 'Data wisudawan berhasil diimpor.');
+        } catch (\Exception $e) {
+            return redirect()->route('wisudawan.index')->with('error', 'Terjadi kesalahan saat impor: ' . $e->getMessage());
         }
-        fclose($handle);
-
-        return redirect()->route('wisudawan.index')->with('success', "Berhasil mengimpor $count data wisudawan.");
     }
 }

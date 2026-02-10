@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('wisudawan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_buku')->constrained('buku_wisuda');
+            $table->unsignedBigInteger('id_buku');
             $table->string('nama');
             $table->string('nim');
             $table->string('nomor');
@@ -24,8 +24,10 @@ return new class extends Migration
             $table->double('ipk');
             $table->string('ka_yudisium');
             $table->text('judul_thesis');
-            $table->string('foto');
+            $table->string('foto')->nullable(); // Make foto nullable just in case, though validation requires it usually.
             $table->timestamps();
+
+            $table->foreign('id_buku')->references('id')->on('buku_wisuda')->onDelete('cascade');
         });
     }
 

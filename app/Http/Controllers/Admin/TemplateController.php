@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class TemplateController extends Controller
 {
+    // Daftar template buku dalam list (index)
     public function index(Request $request)
     {
         $query = TemplateBukuWisuda::query();
 
-        // Search
+        // Search dengan query
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -22,11 +23,12 @@ class TemplateController extends Controller
             });
         }
 
-        // Sort
+        // Sort dengan query database juga
         $sortField = $request->input('sort_by', 'nama');
         $sortDirection = $request->input('sort_order', 'asc');
         $allowedSorts = ['nama', 'layout', 'style', 'created_at', 'updated_at'];
 
+        // Array sort
         if (in_array($sortField, $allowedSorts)) {
             $query->orderBy($sortField, $sortDirection);
         }
@@ -35,6 +37,7 @@ class TemplateController extends Controller
         return view('admin.template.index', compact('templates'));
     }
 
+    // tampilan halaman create template baru
     public function create()
     {
         return view('admin.template.create');
@@ -53,14 +56,16 @@ class TemplateController extends Controller
         TemplateBukuWisuda::create($validated);
 
         return redirect()->route('template.index')->with('success', 'Template berhasil ditambahkan.');
-    }
+    } // end creation
 
+    // tampilan halaman edit template
     public function edit($nama)
     {
         $template = TemplateBukuWisuda::findOrFail($nama);
         return view('admin.template.edit', compact('template'));
     }
 
+    // Update template yang ada
     public function update(Request $request, $nama)
     {
         $template = TemplateBukuWisuda::findOrFail($nama);
@@ -76,8 +81,9 @@ class TemplateController extends Controller
         $template->update($validated);
 
         return redirect()->route('template.index')->with('success', 'Template berhasil diperbarui.');
-    }
+    } // end update (edit)
 
+    // Hapus template
     public function destroy($nama)
     {
         $template = TemplateBukuWisuda::findOrFail($nama);

@@ -1,5 +1,6 @@
 <?php
 
+//Deprecated, tidak terpakai
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;

@@ -31,6 +31,7 @@ class ArsipController extends Controller
             $query->orderBy($sortField, $sortDirection);
         }
 
+        // pagination 
         $archives = $query->paginate(10)->withQueryString();
         return view('admin.arsip.index', compact('archives'));
     }
@@ -42,7 +43,7 @@ class ArsipController extends Controller
 
         $book = BukuWisuda::with(['wisudawan' => function($q) {
             $q->orderBy('fakultas')->orderBy('prodi')->orderBy('nama');
-        }])->findOrFail($id);
+        }, 'template'])->findOrFail($id);
 
         // Toggle Logic: If PDF exists, delete it
         if ($book->file_pdf && \Illuminate\Support\Facades\Storage::disk('public')->exists($book->file_pdf)) {
@@ -52,21 +53,38 @@ class ArsipController extends Controller
         }
 
         // Generate Logic
-        \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('buku_wisuda');
+        \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('buku_wisuda'); //Directory = folder
 
         // Determine filename
         $slug = $book->slug ?? \Illuminate\Support\Str::slug($book->nama_buku) . '-' . $book->id;
         $filename = "buku_wisuda/{$slug}.pdf";
+        $fullPath = storage_path('app/public/' . $filename); // app/public/buku_wisuda/{slug}.pdf
         
-        // Generate PDF
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.arsip.print_book', ['book' => $book, 'isPdf' => true]);
-        $pdf->setPaper('a4', 'portrait');
-        $pdf->setOption(['isRemoteEnabled' => true, 'dpi' => 150]);
+        // Generate PDF using Browsershot (headless Chrome - full CSS3 support!)
+        // Render the HTML from view instead of fetching from URL (avoids auth issues)
+        $html = view('admin.arsip.print_book', ['book' => $book, 'isPdf' => true])->render();
         
-        $pdf->save(storage_path('app/public/' . $filename));
+        \Spatie\Browsershot\Browsershot::html($html)
+            ->format('A4')
+            ->margins(0, 0, 0, 0)
+            ->showBackground()
+            ->waitUntilNetworkIdle()
+            ->save($fullPath);
 
         $book->update(['file_pdf' => $filename]);
 
         return back()->with('success', 'PDF berhasil dibuat.');
+    }
+
+    /**
+     * Browser Print Preview - shows exactly what will be printed/generated
+     */
+    public function printPreview($id)
+    {
+        $book = BukuWisuda::with(['wisudawan' => function($q) {
+            $q->orderBy('fakultas')->orderBy('prodi')->orderBy('nama');
+        }, 'template'])->findOrFail($id);
+
+        return view('admin.arsip.print_book', ['book' => $book, 'isPdf' => false]);
     }
 }

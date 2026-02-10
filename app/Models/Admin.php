@@ -12,11 +12,13 @@ class Admin extends Authenticatable
 
     protected $table = 'admin';
 
+    // fillable yang diisi di form login
     protected $fillable = [
         'email',
         'password',
     ];
 
+    // hidden yang diisi di form login (terenkripsi otomatis)
     protected $hidden = [
         'password',
     ];
