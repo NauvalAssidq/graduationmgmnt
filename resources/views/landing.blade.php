@@ -44,7 +44,7 @@
                     </div>
 
                     <h1 class="text-3xl sm:text-4xl lg:text-6xl font-serif font-bold text-slate-900 leading-tight">
-                        SIM Buku Wisuda Book <br>
+                        SIM Buku Wisuda<br>
                         <span class="text-xl sm:text-2xl lg:text-4xl block mt-2 text-uin-primary font-sans font-semibold">UIN Ar-Raniry Banda Aceh</span>
                     </h1>
 

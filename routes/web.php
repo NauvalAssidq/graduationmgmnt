@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\BukuWisudaController;
 use App\Http\Controllers\Admin\WisudawanController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\Admin\ArsipController;
+use App\Http\Controllers\Admin\AdminManagementController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -38,6 +39,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/arsip', [ArsipController::class, 'index'])->name('admin.arsip.index');
     Route::get('/arsip/preview/{id}', [ArsipController::class, 'printPreview'])->name('admin.arsip.preview');
     Route::post('/arsip/generate/{id}', [ArsipController::class, 'generatePdf'])->name('admin.arsip.generate');
+
+    // Kelola Admin
+    Route::resource('kelola-admin', AdminManagementController::class)->except(['show']);
 
     // Pengaturan
     Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');

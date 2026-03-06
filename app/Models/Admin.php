@@ -12,8 +12,9 @@ class Admin extends Authenticatable
 
     protected $table = 'admin';
 
-    // fillable yang diisi di form login
+    // fillable yang diisi di form login/manajemen admin
     protected $fillable = [
+        'name',
         'email',
         'password',
     ];
