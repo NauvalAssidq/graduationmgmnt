@@ -15,6 +15,7 @@ class Admin extends Authenticatable
     // fillable yang diisi di form login/manajemen admin
     protected $fillable = [
         'name',
+        'nip',
         'email',
         'password',
     ];

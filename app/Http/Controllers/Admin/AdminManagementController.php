@@ -38,13 +38,15 @@ class AdminManagementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'                  => 'required|string|max:100',
-            'email'                 => 'required|email|unique:admin,email',
-            'password'              => 'required|string|min:8|confirmed',
+            'name'     => 'required|string|max:100',
+            'nip'      => 'nullable|string|size:18|unique:admin,nip',
+            'email'    => 'required|email|unique:admin,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         Admin::create([
             'name'     => $request->name,
+            'nip'      => $request->nip ?: null,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -65,12 +67,14 @@ class AdminManagementController extends Controller
         $admin = $admin_management;
 
         $request->validate([
-            'name'             => 'required|string|max:100',
-            'email'            => 'required|email|unique:admin,email,' . $admin->id,
-            'new_password'     => 'nullable|string|min:8|confirmed',
+            'name'         => 'required|string|max:100',
+            'nip'          => 'nullable|string|size:18|unique:admin,nip,' . $admin->id,
+            'email'        => 'required|email|unique:admin,email,' . $admin->id,
+            'new_password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $admin->name  = $request->name;
+        $admin->nip   = $request->nip ?: null;
         $admin->email = $request->email;
 
         if ($request->filled('new_password')) {

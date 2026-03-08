@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wisudawan', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_buku');
+            $table->integerIncrements('id');
+            $table->unsignedInteger('id_buku');
             $table->string('nama');
-            $table->string('nim');
+            $table->char('nim', 20);
             $table->string('nomor');
             $table->string('ttl');
-            $table->string('jenis_kelamin');
+            $table->char('jenis_kelamin', 1);
             $table->string('prodi');
             $table->string('fakultas');
             $table->double('ipk');
             $table->string('ka_yudisium');
             $table->text('judul_thesis');
-            $table->string('foto')->nullable(); // Make foto nullable just in case, though validation requires it usually.
+            $table->string('foto')->nullable();
             $table->timestamps();
 
             $table->foreign('id_buku')->references('id')->on('buku_wisuda')->onDelete('cascade');

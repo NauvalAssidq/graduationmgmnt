@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admin', function (Blueprint $table) {
-            $table->id();
+            $table->integerIncrements('id');
+            $table->string('name')->nullable();
+            $table->char('nip', 18)->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamps();
         });
     }
-
-    // Membuat tabel admin dengan kolom berupa id, email, password, dan timestamps
 
     /**
      * Reverse the migrations.

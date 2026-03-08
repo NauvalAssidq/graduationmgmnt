@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         // Create default Admin account
         \App\Models\Admin::create([
+            'name' => 'Admin Pertama',
+            'nip' => '123456789012345678',
             'email' => 'admin@ar-raniry.ac.id',
             'password' => bcrypt('password'),
         ]);

@@ -32,6 +32,15 @@
                     @enderror
                 </div>
 
+                {{-- NIP --}}
+                <div>
+                    <label for="nip" class="block text-sm font-medium text-slate-700 mb-1">NIP <span class="text-slate-400 font-normal text-xs">(opsional, 18 digit)</span></label>
+                    <input type="text" name="nip" id="nip" value="{{ old('nip') }}" maxlength="18" class="w-full p-2.5 rounded-lg border font-mono {{ $errors->has('nip') ? 'border-red-400 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-emerald-500 focus:border-emerald-500' }} text-sm" placeholder="18 digit NIP">
+                    @error('nip')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Email --}}
                 <div>
                     <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Alamat Email <span class="text-red-500">*</span></label>
