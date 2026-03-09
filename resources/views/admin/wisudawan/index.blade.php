@@ -137,7 +137,7 @@
                                 <td class="px-6 py-4 font-medium text-slate-900 flex items-center gap-3">
                                     <div class="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs shrink-0 overflow-hidden">
                                         @if($graduate->foto)
-                                            <img src="{{ Storage::url($graduate->foto) }}" alt="{{ $graduate->nama }}" class="h-full w-full object-cover">
+                                            <img src="{{ Str::startsWith($graduate->foto, 'http') ? $graduate->foto : Storage::url($graduate->foto) }}" alt="{{ $graduate->nama }}" class="h-full w-full object-cover">
                                         @else
                                             {{ substr($graduate->nama, 0, 1) }}
                                         @endif

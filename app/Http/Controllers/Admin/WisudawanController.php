@@ -4,44 +4,47 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Wisudawan;
+use App\Models\Api\WisudawanApi;
 use App\Models\BukuWisuda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class WisudawanController extends Controller
 {
-    // daftar wisudawan dengan index, yang berisi filter dan pagination
     public function index(Request $request)
     {
-        // implementasi API dengan route api.wisudawan.index atau api lainnya sesuai dengan link
-        $proxy = Request::create(route('api.wisudawan.index'), 'GET', $request->all());
-        
-        $response = Route::dispatch($proxy);
-        
-        $data = json_decode($response->getContent());
-        
-        $items = collect($data->data)->map(function ($item) {
-            $w = new Wisudawan();
-            $w->forceFill((array)$item);
-            $w->exists = true;
-            
-            if (isset($item->buku_wisuda)) {
-                $relation = new BukuWisuda();
-                $relation->forceFill((array)$item->buku_wisuda);
-                $relation->exists = true;
-                $w->setRelation('bukuWisuda', $relation);
-            }
-            return $w;
-        });
+        $query = Wisudawan::with('bukuWisuda');
 
-        // Recreate Paginator
-        $graduates = new \Illuminate\Pagination\LengthAwarePaginator(
-            $items,
-            $data->total,
-            $data->per_page,
-            $data->current_page,
-            ['path' => url()->current()]
-        )->withQueryString();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nim', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('fakultas')) {
+            $query->where('fakultas', $request->fakultas);
+        }
+
+        if ($request->filled('prodi')) {
+            $query->where('prodi', $request->prodi);
+        }
+
+        if ($request->filled('yudisium')) {
+            $query->where('ka_yudisium', $request->yudisium);
+        }
+
+        $sortField     = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_order', 'desc');
+        $allowedSorts  = ['nama', 'nim', 'prodi', 'fakultas', 'ipk', 'ka_yudisium', 'created_at'];
+
+        if (in_array($sortField, $allowedSorts)) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        $graduates = $query->paginate(20)->withQueryString();
 
         $faculties = Wisudawan::distinct()->pluck('fakultas')->sort()->values();
         $prodis = Wisudawan::distinct()->pluck('prodi')->sort()->values();

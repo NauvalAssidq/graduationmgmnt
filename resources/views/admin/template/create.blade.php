@@ -25,11 +25,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <div>
                             <label for="layout" class="block text-sm font-medium text-slate-700 mb-1">Layout Type</label>
-                            <select name="layout" id="layout" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" required>
-                                <option value="A4" {{ old('layout') == 'A4' ? 'selected' : '' }}>A4 (Standar)</option>
-                                <option value="F4" {{ old('layout') == 'F4' ? 'selected' : '' }}>F4 (Legal)</option>
-                                <option value="Booklet" {{ old('layout') == 'Booklet' ? 'selected' : '' }}>Booklet (A5)</option>
-                            </select>
+                            <x-select 
+                                name="layout" 
+                                :options="['A4' => 'A4 (Standar)', 'F4' => 'F4 (Legal)', 'Booklet' => 'Booklet (A5)']" 
+                                :value="old('layout', 'A4')"
+                                class="w-full" 
+                            />
                             @error('layout') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 

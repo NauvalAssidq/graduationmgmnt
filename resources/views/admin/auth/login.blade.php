@@ -11,9 +11,7 @@
     <div class="flex-1 flex items-center justify-center p-4 relative pt-20">
         <!-- Background Decor -->
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-uin-primary/5 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-uin-gold/10 rounded-full blur-3xl"></div>
-
-        <div class="w-full max-w-[400px] bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-gray-100/50 relative z-10">
+        <div class="w-full max-w-[400px] bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-gray-200 relative z-10">
             <div class="p-8 pb-6 text-center">
                  <div class="w-16 h-16 bg-gradient-to-br from-uin-primary to-uin-dark rounded-xl mx-auto flex items-center justify-center text-white font-serif font-bold text-3xl mb-4 shadow-lg shadow-emerald-700/20">
                     U

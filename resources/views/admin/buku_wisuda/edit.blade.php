@@ -24,23 +24,25 @@
 
                     <div>
                         <label for="template_id" class="block text-sm font-medium text-slate-700 mb-1">Template Layout (Optional)</label>
-                        <select name="template_id" id="template_id" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm">
-                            <option value="">-- Pilih Template --</option>
-                            @foreach($templates as $template)
-                                <option value="{{ $template->nama }}" {{ old('template_id', $bukuWisuda->template_id) == $template->nama ? 'selected' : '' }}>{{ $template->nama }} ({{ $template->layout }})</option>
-                            @endforeach
-                        </select>
+                        <x-select 
+                            name="template_id" 
+                            :options="$templates->mapWithKeys(function ($t) { return [$t->nama => $t->nama . ' (' . $t->layout . ')']; })->toArray()" 
+                            :value="old('template_id', $bukuWisuda->template_id)" 
+                            placeholder="-- Pilih Template --"
+                            class="w-full" 
+                        />
                         <p class="text-xs text-slate-400 mt-1">Pilih layout untuk cetak PDF otomatis.</p>
                         @error('template_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label for="status" class="block text-sm font-medium text-slate-700 mb-1">Status Publikasi</label>
-                        <select name="status" id="status" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" required>
-                            <option value="Draft" {{ old('status', $bukuWisuda->status) == 'Draft' ? 'selected' : '' }}>Draft</option>
-                            <option value="Published" {{ old('status', $bukuWisuda->status) == 'Published' ? 'selected' : '' }}>Published</option>
-                            <option value="Archived" {{ old('status', $bukuWisuda->status) == 'Archived' ? 'selected' : '' }}>Archived</option>
-                        </select>
+                        <x-select 
+                            name="status" 
+                            :options="['Draft' => 'Draft', 'Published' => 'Published', 'Archived' => 'Archived']" 
+                            :value="old('status', $bukuWisuda->status)" 
+                            class="w-full" 
+                        />
                         @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 

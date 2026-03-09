@@ -19,33 +19,39 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-300 overflow-hidden">
             {{-- Filter Section --}}
             <div class="p-4 border-b border-gray-100 bg-gray-50/50">
-                <form action="{{ route('buku-wisuda.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
+                <form action="{{ route('buku-wisuda.index') }}" method="GET" class="w-full flex flex-col sm:flex-row sm:justify-between items-center gap-4">
                     {{-- Search --}}
-                    <div class="flex-1 relative">
+                    <div class="w-full sm:w-64 md:w-80 lg:w-[400px] relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                        <input type="text" name="search" value="{{ request('search') }}" class="pl-10 w-full p-2.5 rounded-lg border border-gray-300 text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Cari buku atau gelombang...">
+                        <input type="text" name="search" value="{{ request('search') }}" class="pl-10 pr-3 py-2 w-full rounded-lg border border-gray-300 text-sm focus:ring-emerald-500 focus:border-emerald-500 shadow-sm" placeholder="Cari buku atau gelombang...">
                     </div>
                     
-                    {{-- Year Filter --}}
-                    <div class="w-full sm:w-40">
-                        <select name="tahun" class="w-full p-2.5 rounded-lg border border-gray-300 text-sm focus:ring-emerald-500 focus:border-emerald-500 text-slate-600 bg-white" onchange="this.form.submit()">
-                            <option value="">Semua Tahun</option>
-                            @foreach($years as $year)
-                                <option value="{{ $year }}" {{ request('tahun') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <div class="flex items-center gap-4 ml-auto w-full sm:w-auto">
+                        {{-- Year Filter --}}
+                        <div class="w-full sm:w-48 md:w-56 lg:w-64">
+                            <x-select 
+                                name="tahun" 
+                                :options="$years->mapWithKeys(function ($y) { return [$y => $y]; })->toArray()"
+                                :value="request('tahun')"
+                                placeholder="Semua Tahun"
+                                :submitOnChange="true"
+                                class="w-full"
+                            />
+                        </div>
 
-                    {{-- Status Filter --}}
-                    <div class="w-full sm:w-40">
-                        <select name="status" class="w-full p-2.5 rounded-lg border border-gray-300 text-sm focus:ring-emerald-500 focus:border-emerald-500 text-slate-600 bg-white" onchange="this.form.submit()">
-                            <option value="">Semua Status</option>
-                            <option value="Published" {{ request('status') == 'Published' ? 'selected' : '' }}>Published</option>
-                            <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
-                            <option value="Archived" {{ request('status') == 'Archived' ? 'selected' : '' }}>Archived</option>
-                        </select>
+                        {{-- Status Filter --}}
+                        <div class="w-full sm:w-48 md:w-56 lg:w-64">
+                            <x-select 
+                                name="status" 
+                                :options="['Published' => 'Published', 'Draft' => 'Draft', 'Archived' => 'Archived']"
+                                :value="request('status')"
+                                placeholder="Semua Status"
+                                :submitOnChange="true"
+                                class="w-full"
+                            />
+                        </div>
                     </div>
 
                     @if(request('sort_by'))

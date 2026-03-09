@@ -46,4 +46,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Pengaturan
     Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+    // API Sources
+    Route::post('/api-sources', [App\Http\Controllers\Admin\ApiSourceController::class, 'store'])->name('api-sources.store');
+    Route::delete('/api-sources/{apiSource}', [App\Http\Controllers\Admin\ApiSourceController::class, 'destroy'])->name('api-sources.destroy');
 });

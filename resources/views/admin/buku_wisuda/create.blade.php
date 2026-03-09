@@ -23,23 +23,25 @@
 
                     <div>
                         <label for="template_id" class="block text-sm font-medium text-slate-700 mb-1">Template Layout (Optional)</label>
-                        <select name="template_id" id="template_id" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm">
-                            <option value="">-- Pilih Template --</option>
-                            @foreach($templates as $template)
-                                <option value="{{ $template->nama }}" {{ old('template_id') == $template->nama ? 'selected' : '' }}>{{ $template->nama }} ({{ $template->layout }})</option>
-                            @endforeach
-                        </select>
+                        <x-select 
+                            name="template_id" 
+                            :options="$templates->mapWithKeys(function ($t) { return [$t->nama => $t->nama . ' (' . $t->layout . ')']; })->toArray()" 
+                            :value="old('template_id')" 
+                            placeholder="-- Pilih Template --"
+                            class="w-full" 
+                        />
                         <p class="text-xs text-slate-400 mt-1">Pilih layout untuk cetak PDF otomatis.</p>
                         @error('template_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label for="status" class="block text-sm font-medium text-slate-700 mb-1">Status Publikasi</label>
-                        <select name="status" id="status" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" required>
-                            <option value="Draft" {{ old('status') == 'Draft' ? 'selected' : '' }}>Draft (Belum Tampil)</option>
-                            <option value="Published" {{ old('status') == 'Published' ? 'selected' : '' }}>Published (Tampil di Web)</option>
-                            <option value="Archived" {{ old('status') == 'Archived' ? 'selected' : '' }}>Archived (Arsip)</option>
-                        </select>
+                        <x-select 
+                            name="status" 
+                            :options="['Draft' => 'Draft (Belum Tampil)', 'Published' => 'Published (Tampil di Web)', 'Archived' => 'Archived (Arsip)']" 
+                            :value="old('status', 'Draft')" 
+                            class="w-full" 
+                        />
                         <p class="text-xs text-slate-400 mt-1">Hanya buku "Published" yang muncul di halaman depan.</p>
                         @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
