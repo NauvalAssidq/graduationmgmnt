@@ -1,5 +1,7 @@
 # Graduation Management System
 
+![Hero Image](storage/app/public/assets/hero.png)
+
 A comprehensive Laravel-based application for managing graduation events, graduates (Wisudawan), and generating graduation books (Buku Wisuda).
 
 ## Features
