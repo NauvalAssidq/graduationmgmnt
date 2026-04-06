@@ -14,6 +14,7 @@ class BukuWisuda extends Model
     // fillable yang diisi di form create
     protected $fillable = [
         'nama_buku',
+        'admin_id',
         'slug',
         'template_id',
         'tanggal_terbit',
@@ -66,5 +67,10 @@ class BukuWisuda extends Model
     public function wisudawan()
     {
         return $this->hasMany(Wisudawan::class, 'id_buku');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 }

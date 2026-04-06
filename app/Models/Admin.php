@@ -24,4 +24,14 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function buku()
+    {
+        return $this->hasMany(BukuWisuda::class, 'admin_id');
+    }
+
+    public function settings()
+    {
+        return $this->hasMany(Setting::class, 'admin_id');
+    }
 }
