@@ -23,34 +23,28 @@
                 background: #ffffff; 
             }
             
-            /* Pages - overflow goes to next page */
+            /* Pages - fixed A4 height, no overflow */
             .a4-page, .sheet { 
                 width: 210mm !important; 
-                min-height: 297mm;
-                height: auto; /* Allow overflow to next page */
+                height: 297mm !important;
                 margin: 0 !important; 
-                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important; /* Top Right Bottom Left */
+                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important;
                 background: #ffffff; 
                 position: relative;
                 box-sizing: border-box !important;
-                overflow: visible;
+                overflow: hidden;
+                page-break-after: always;
+                page-break-inside: avoid;
             }
             
-            /* Cover page - fixed height, no padding */
+            /* Cover page - no padding */
             .a4-page.center { 
                 padding: 0 !important;
-                height: 297mm !important;
-                overflow: hidden;
             }
             
             /* SK Rektor page - reduced 1cm padding */
             .a4-page.sk-page, .sk-page {
                 padding: 1cm !important;
-            }
-            
-            /* Page breaks between pages */
-            .a4-page + .a4-page, .sheet + .sheet, .a4-page + .sheet, .sheet + .a4-page {
-                page-break-before: always;
             }
             
             /* Force background colors */
@@ -95,15 +89,12 @@
             
             .no-print { display: none !important; }
             
-            /* 
-             * Pages with content padding - overflow goes to next page
-             */
+            /* Pages - fixed A4 height, no overflow */
             .a4-page, .sheet { 
                 width: 210mm !important;
-                min-height: 297mm !important;
-                height: auto !important; /* Allow page to expand for overflow */
+                height: 297mm !important;
                 margin: 0 !important; 
-                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important; /* Top Right Bottom Left - consistent margins */
+                padding: 2.5cm 2.5cm 2.5cm 2.5cm !important;
                 background: white !important;
                 background-color: white !important;
                 box-shadow: none !important; 
@@ -111,31 +102,25 @@
                 border: none !important;
                 display: block !important;
                 box-sizing: border-box !important;
-                overflow: visible !important; /* Let content flow to next page */
-                page-break-inside: auto; /* Allow page breaks inside if content is long */
+                overflow: hidden !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
             }
             
-            /* Cover page with decorative bars at edges needs no padding */
+            /* Cover page - no padding */
             .a4-page.center { 
                 padding: 0 !important;
-                height: 297mm !important; /* Cover page is exactly one page */
-                overflow: hidden !important;
             }
             
-            /* SK Rektor page - reduced 1cm padding to fit single page */
+            /* SK Rektor page - reduced 1cm padding */
             .a4-page.sk-page, .sk-page {
                 padding: 1cm !important;
             }
             
-            /* Separator pages (Fakultas covers) - need background support */
+            /* Separator pages - background support */
             .a4-page.sheet[style*="background-color"] {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-            }
-            
-            /* Page breaks between pages */
-            .a4-page + .a4-page, .sheet + .sheet, .a4-page + .sheet, .sheet + .a4-page {
-                page-break-before: always;
             }
 
             /* FORCE ALL BACKGROUND COLORS TO PRINT (including inline styles) */
@@ -304,8 +289,22 @@
                          return '';
                      }, $content);
 
-                     // C. BUILD HTML
-                     $dynamicList = implode('', $tocEntries);
+                     // C. PAGINATE THE TOC ENTRIES
+                     // The first page has headers, so it fits fewer entries. Subsequent pages fit more.
+                     $firstPageEntries = array_slice($tocEntries, 0, 18);
+                     $remainingEntries = array_slice($tocEntries, 18);
+                     $subsequentPages = $remainingEntries ? array_chunk($remainingEntries, 28) : [];
+                     
+                     $dynamicList = implode('', $firstPageEntries);
+                     
+                     // D. CREATE ADDITIONAL PAGES FOR OVERFLOW
+                     $additionalPages = '';
+                     foreach ($subsequentPages as $index => $pageEntries) {
+                         $additionalPages .= '<div class="a4-page sheet font-serif" style="page-break-before: always; padding: 2.5cm 2.5cm 2.5cm 2.5cm !important; position: relative;">';
+                         $additionalPages .= '<div style="font-size: 12pt; padding: 0 1cm;">'; 
+                         $additionalPages .= implode('', $pageEntries);
+                         $additionalPages .= '</div></div>';
+                     }
                      
                      // D. INJECT DYNAMIC LIST into first page
                      $marker = 'DAFTAR LULUSAN';
@@ -318,6 +317,9 @@
                              $content = substr_replace($content, $dynamicList, $insertionPoint, 0);
                          }
                      }
+                     
+                     // Append the additional pages AFTER the current page's closing div
+                     $content .= $additionalPages;
                 }
 
                 // --- 2. PAGINATION INJECTION ---
@@ -513,7 +515,7 @@
         
                     <!-- Page Break Logic: 3 students per page max (applies to ALL modes) -->
                     @if($loop->iteration % 3 == 0 && !$loop->last)
-                        </div></div><div class="a4-page sheet page-break"><div class="space-y-6" style="padding-top: 0;">
+                        </div></div><div class="a4-page sheet" style="page-break-before: always;"><div class="space-y-6" style="padding-top: 0;">
                     @endif
                 @endforeach
                 </div>
