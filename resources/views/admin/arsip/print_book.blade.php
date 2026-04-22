@@ -295,11 +295,7 @@
                         $fC++;
                      }
                      
-                     // B. PAGINATE: Split into pages (~22 entries per page to fit with header)
-                     $entriesPerPage = 22;
-                     $tocPages = array_chunk($tocEntries, $entriesPerPage);
-                     
-                     // C. CLEANUP STATIC ITEMS
+                     // B. CLEANUP STATIC ITEMS
                      $content = preg_replace_callback('/<div class="toc-row".*?>.*?<\/div>/si', function($matches) {
                          $row = $matches[0];
                          if (stripos($row, 'SAMBUTAN') !== false) return $row;
@@ -308,21 +304,10 @@
                          return '';
                      }, $content);
 
-                     // D. BUILD PAGINATED HTML
-                     $dynamicList = implode('', $tocPages[0] ?? []); // First page entries
+                     // C. BUILD HTML
+                     $dynamicList = implode('', $tocEntries);
                      
-                     // Create additional TOC pages if needed
-                     $additionalPages = '';
-                     for ($p = 1; $p < count($tocPages); $p++) {
-                         $pageNum = $pNum + $p; // Track page number
-                         $additionalPages .= '<div class="a4-page sheet font-serif" style="padding: 2.5cm 2.5cm 2.5cm 2.5cm;">';
-                         $additionalPages .= '<div style="font-size: 12pt;">'; // Content wrapper
-                         $additionalPages .= '<div class="toc-row bold" style="margin-bottom: 15px;"><span>DAFTAR LULUSAN (lanjutan)</span></div>';
-                         $additionalPages .= implode('', $tocPages[$p]);
-                         $additionalPages .= '</div></div>';
-                     }
-                     
-                     // E. INJECT DYNAMIC LIST into first page
+                     // D. INJECT DYNAMIC LIST into first page
                      $marker = 'DAFTAR LULUSAN';
                      $markerPos = stripos($content, $marker);
                      
@@ -333,9 +318,6 @@
                              $content = substr_replace($content, $dynamicList, $insertionPoint, 0);
                          }
                      }
-                     
-                     // F. Append additional pages at the end of this page
-                     $content .= $additionalPages;
                 }
 
                 // --- 2. PAGINATION INJECTION ---
