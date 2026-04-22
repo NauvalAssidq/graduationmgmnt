@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Hash;
 
 class SettingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $tab = $request->query('tab', 'account');
         $apiSources = ApiSource::with('bukuWisuda')->latest()->get();
-        return view('admin.settings.index', compact('apiSources'));
+        return view('admin.settings.index', compact('tab', 'apiSources'));
     }
 
-    public function update(Request $request)
+    public function updateAccount(Request $request)
     {
-        $user = Auth::user();
+        $user = Auth::user(); // User maps to Admin
 
         $request->validate([
-            'email'            => 'required|email|unique:users,email,' . $user->id,
+            'email'            => 'required|email|unique:admin,email,' . $user->admin_id . ',admin_id',
             'current_password' => 'nullable|required_with:new_password',
             'new_password'     => 'nullable|min:8|confirmed',
         ]);
@@ -40,4 +41,5 @@ class SettingController extends Controller
 
         return back()->with('success', 'Pengaturan akun berhasil diperbarui.');
     }
+
 }

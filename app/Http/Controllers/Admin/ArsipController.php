@@ -56,7 +56,7 @@ class ArsipController extends Controller
         \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('buku_wisuda'); //Directory = folder
 
         // Determine filename
-        $slug = $book->slug ?? \Illuminate\Support\Str::slug($book->nama_buku) . '-' . $book->id;
+        $slug = $book->slug ?? \Illuminate\Support\Str::slug($book->nama_buku) . '-' . $book->buku_wisuda_id;
         $filename = "buku_wisuda/{$slug}.pdf";
         $fullPath = storage_path('app/public/' . $filename); // app/public/buku_wisuda/{slug}.pdf
         

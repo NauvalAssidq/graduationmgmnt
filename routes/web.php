@@ -33,7 +33,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/wisudawan/import', [WisudawanController::class, 'import'])->name('wisudawan.import');
     
     // Kelola Template
-    Route::resource('template', TemplateController::class);
+    Route::resource('template', TemplateController::class)->except(['index', 'show'])->middleware('system.admin');
+    Route::resource('template', TemplateController::class)->only(['index', 'show']);
     
     // Kelola Arsip
     Route::get('/arsip', [ArsipController::class, 'index'])->name('admin.arsip.index');
@@ -41,11 +42,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/arsip/generate/{id}', [ArsipController::class, 'generatePdf'])->name('admin.arsip.generate');
 
     // Kelola Admin
-    Route::resource('kelola-admin', AdminManagementController::class)->except(['show']);
+    Route::resource('kelola-admin', AdminManagementController::class)->except(['show'])->middleware('system.admin');
 
-    // Pengaturan
+    // Pengaturan Akun & API
     Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/account', [App\Http\Controllers\Admin\SettingController::class, 'updateAccount'])->name('settings.account.update');
 
     // API Sources
     Route::post('/api-sources', [App\Http\Controllers\Admin\ApiSourceController::class, 'store'])->name('api-sources.store');

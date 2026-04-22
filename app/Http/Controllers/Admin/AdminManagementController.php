@@ -68,8 +68,8 @@ class AdminManagementController extends Controller
 
         $request->validate([
             'name'         => 'required|string|max:100',
-            'nip'          => 'nullable|string|size:18|unique:admin,nip,' . $admin->id,
-            'email'        => 'required|email|unique:admin,email,' . $admin->id,
+            'nip'          => 'nullable|string|size:18|unique:admin,nip,' . $admin->admin_id,
+            'email'        => 'required|email|unique:admin,email,' . $admin->admin_id,
             'new_password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -92,7 +92,7 @@ class AdminManagementController extends Controller
     {
         $admin = $admin_management;
 
-        if ($admin->id === Auth::id()) {
+        if ($admin->admin_id === Auth::id()) {
             return redirect()->route('kelola-admin.index')
                 ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }

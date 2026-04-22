@@ -59,19 +59,19 @@ class TemplateController extends Controller
     } // end creation
 
     // tampilan halaman edit template
-    public function edit($nama)
+    public function edit($template_id)
     {
-        $template = TemplateBukuWisuda::findOrFail($nama);
+        $template = TemplateBukuWisuda::findOrFail($template_id);
         return view('admin.template.edit', compact('template'));
     }
 
     // Update template yang ada
-    public function update(Request $request, $nama)
+    public function update(Request $request, $template_id)
     {
-        $template = TemplateBukuWisuda::findOrFail($nama);
+        $template = TemplateBukuWisuda::findOrFail($template_id);
         
         $validated = $request->validate([
-            'nama' => 'required|string|max:255|unique:template_buku_wisuda,nama,'.$template->nama.',nama',
+            'nama' => 'required|string|max:255|unique:template_buku_wisuda,nama,'.$template->template_id.',template_id',
             'layout' => 'required|string',
             'style' => 'required|string',
             'cover_html' => 'nullable|string',
@@ -84,9 +84,9 @@ class TemplateController extends Controller
     } // end update (edit)
 
     // Hapus template
-    public function destroy($nama)
+    public function destroy($template_id)
     {
-        $template = TemplateBukuWisuda::findOrFail($nama);
+        $template = TemplateBukuWisuda::findOrFail($template_id);
         $template->delete();
 
         return redirect()->route('template.index')->with('success', 'Template berhasil dihapus.');

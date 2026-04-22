@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('api_sources', function (Blueprint $table) {
-            $table->integerIncrements('id');
+            $table->integerIncrements('api_source_id');
             $table->string('nama_buku');
             $table->char('tahun', 4);
             $table->string('api_url');
@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('buku_wisuda_id')
-                  ->references('id')
+                  ->references('buku_wisuda_id')
                   ->on('buku_wisuda')
                   ->nullOnDelete();
         });

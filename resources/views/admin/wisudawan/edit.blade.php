@@ -11,7 +11,7 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
-            <form action="{{ route('wisudawan.update', $wisudawan->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ route('wisudawan.update', $wisudawan->wisudawan_id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -68,14 +68,14 @@
                         <h3 class="text-sm font-semibold text-emerald-700 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4">Informasi Akademik</h3>
 
                         <div>
-                            <label for="id_buku" class="block text-sm font-medium text-slate-700 mb-1">Buku Wisuda</label>
+                            <label for="buku_wisuda_id" class="block text-sm font-medium text-slate-700 mb-1">Buku Wisuda</label>
                             <x-select 
-                                name="id_buku" 
-                                :options="$books->mapWithKeys(fn($b) => [$b->id => $b->nama_buku . ' (' . $b->tahun . ')'])" 
-                                :value="old('id_buku', $wisudawan->id_buku)" 
+                                name="buku_wisuda_id" 
+                                :options="$books->mapWithKeys(fn($b) => [$b->buku_wisuda_id => $b->nama_buku . ' (' . $b->tahun . ')'])" 
+                                :value="old('buku_wisuda_id', $wisudawan->buku_wisuda_id)" 
                                 placeholder="-- Pilih Buku --" 
                             />
-                            @error('id_buku') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('buku_wisuda_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div>

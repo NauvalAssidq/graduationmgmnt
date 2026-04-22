@@ -10,10 +10,8 @@ class PublicController extends Controller
 {
     public function index(Request $request)
     {
-        // Fetch latest book for hero section
         $latestBook = BukuWisuda::where('status', 'Published')->latest('tanggal_terbit')->first();
 
-        // Fetch books for the list with search and pagination
         $query = BukuWisuda::where('status', 'Published')
             ->withCount('wisudawan')
             ->with('template');

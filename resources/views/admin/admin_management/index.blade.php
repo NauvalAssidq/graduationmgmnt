@@ -68,7 +68,7 @@
                                     </div>
                                     <div>
                                         <p class="font-medium text-slate-900">{{ $admin->name ?? '—' }}</p>
-                                        @if(Auth::id() === $admin->id)
+                                        @if(Auth::id() === $admin->admin_id)
                                             <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-700 mt-0.5">Anda</span>
                                         @endif
                                     </div>
@@ -82,7 +82,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </a>
 
-                                    @if(Auth::id() !== $admin->id)
+                                    @if(Auth::id() !== $admin->admin_id)
                                         <form action="{{ route('kelola-admin.destroy', $admin) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?');">
                                             @csrf
                                             @method('DELETE')

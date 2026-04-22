@@ -45,7 +45,7 @@ class ApiSourceController extends Controller
                     \App\Models\Wisudawan::updateOrCreate(
                         ['nim' => $item['nim']],
                         [
-                            'id_buku'       => $buku->id,
+                            'buku_wisuda_id'=> $buku->buku_wisuda_id,
                             'nama'          => $item['nama'] ?? '-',
                             'nomor'         => $item['nomor'] ?? '-',
                             'ttl'           => $item['ttl'] ?? '-',
@@ -73,10 +73,10 @@ class ApiSourceController extends Controller
             'nama_buku'      => $validated['nama_buku'],
             'tahun'          => $validated['tahun'],
             'api_url'        => $validated['api_url'],
-            'buku_wisuda_id' => $buku->id,
+            'buku_wisuda_id' => $buku->buku_wisuda_id,
         ]);
 
-        return redirect()->route('settings.index')
+        return redirect()->route('settings.api')
                          ->with('success', 'Sumber data API berhasil ditambahkan.');
     }
 
@@ -89,7 +89,7 @@ class ApiSourceController extends Controller
 
         $apiSource->delete();
 
-        return redirect()->route('settings.index')
+        return redirect()->route('settings.api')
                          ->with('success', 'Sumber data API berhasil dihapus.');
     }
 }

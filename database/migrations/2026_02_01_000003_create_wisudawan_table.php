@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wisudawan', function (Blueprint $table) {
-            $table->integerIncrements('id');
-            $table->unsignedInteger('id_buku');
+            $table->integerIncrements('wisudawan_id');
+            $table->unsignedInteger('buku_wisuda_id');
             $table->string('nama');
             $table->char('nim', 20);
             $table->string('nomor');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->timestamps();
 
-            $table->foreign('id_buku')->references('id')->on('buku_wisuda')->onDelete('cascade');
+            $table->foreign('buku_wisuda_id')->references('buku_wisuda_id')->on('buku_wisuda')->onDelete('cascade');
         });
     }
 

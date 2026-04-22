@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('template_buku_wisuda', function (Blueprint $table) {
-            $table->string('nama')->primary();
+            $table->id('template_id');
+            $table->string('nama')->unique();
             $table->string('layout');
             $table->string('style');
             $table->longText('cover_html')->nullable();

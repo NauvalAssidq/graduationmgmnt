@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ApiSource extends Model
 {
+    protected $primaryKey = 'api_source_id';
+
     protected $fillable = [
         'nama_buku',
         'tahun',

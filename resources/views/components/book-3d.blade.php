@@ -127,8 +127,8 @@
     .book-pages-block {
         position: absolute;
         top: 4px; /* Slight inset */
-        left: 2px;
-        width: calc(100% - 6px);
+        left: 0;
+        width: calc(100% - 4px);
         height: calc(100% - 8px);
         background: #fff;
         transform: translateZ(-35px); /* Positioned inside the spine */
@@ -143,8 +143,8 @@
     .first-page {
         position: absolute;
         top: 4px;
-        left: 2px;
-        width: calc(100% - 6px);
+        left: 0;
+        width: calc(100% - 4px);
         height: calc(100% - 8px);
         background: #fdfbf7;
         transform: translateZ(-2px); /* Just behind the cover */
@@ -161,8 +161,8 @@
     .page-layer {
         position: absolute;
         top: 4px;
-        left: 2px;
-        width: calc(100% - 6px);
+        left: 0;
+        width: calc(100% - 4px);
         height: calc(100% - 8px);
         background: #fff;
         border: 1px solid #f1f5f9;

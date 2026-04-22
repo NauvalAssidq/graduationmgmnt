@@ -63,7 +63,7 @@ class WisudawanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_buku' => 'required|exists:buku_wisuda,id',
+            'buku_wisuda_id' => 'required|exists:buku_wisuda,buku_wisuda_id',
             'nama' => 'required|string|max:255',
             'nim' => 'required|string|max:20|unique:wisudawan,nim',
             'nomor' => 'required|string',
@@ -96,9 +96,9 @@ class WisudawanController extends Controller
     public function update(Request $request, Wisudawan $wisudawan)
     {
         $validated = $request->validate([
-            'id_buku' => 'required|exists:buku_wisuda,id',
+            'buku_wisuda_id' => 'required|exists:buku_wisuda,buku_wisuda_id',
             'nama' => 'required|string|max:255',
-            'nim' => 'required|string|max:20|unique:wisudawan,nim,' . $wisudawan->id,
+            'nim' => 'required|string|max:20|unique:wisudawan,nim,' . $wisudawan->wisudawan_id,
             'nomor' => 'required|string',
             'ttl' => 'required|string',
             'jenis_kelamin' => 'required|in:L,P',

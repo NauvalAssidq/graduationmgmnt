@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('buku_wisuda', function (Blueprint $table) {
-            $table->integerIncrements('id');
+            $table->integerIncrements('buku_wisuda_id');
             $table->string('nama_buku');
-            $table->string('template_id')->nullable();
+            $table->unsignedBigInteger('template_id')->nullable();
             $table->string('slug')->nullable();
             $table->date('tanggal_terbit');
             $table->char('gelombang', 1);
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('file_pdf')->nullable();
             $table->timestamps();
 
-            $table->foreign('template_id')->references('nama')->on('template_buku_wisuda')->nullOnDelete();
+            $table->foreign('template_id')->references('template_id')->on('template_buku_wisuda')->nullOnDelete();
         });
     }
 

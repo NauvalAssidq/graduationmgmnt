@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('buku_wisuda', function (Blueprint $table) {
             $table->unsignedInteger('admin_id')->nullable()->after('nama_buku');
-            $table->foreign('admin_id')->references('id')->on('admin')->nullOnDelete();
+            $table->foreign('admin_id')->references('admin_id')->on('admin')->nullOnDelete();
         });
     }
 

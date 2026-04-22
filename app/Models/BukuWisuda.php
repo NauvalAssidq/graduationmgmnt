@@ -10,7 +10,7 @@ class BukuWisuda extends Model
     use HasFactory;
 
     protected $table = 'buku_wisuda';
-
+    protected $primaryKey = 'buku_wisuda_id';
     // fillable yang diisi di form create
     protected $fillable = [
         'nama_buku',
@@ -51,7 +51,7 @@ class BukuWisuda extends Model
                 $slug = \Illuminate\Support\Str::slug($model->nama_buku);
                 $originalSlug = $slug;
                 $count = 1;
-                while (static::where('slug', $slug)->where('id', '!=', $model->id)->exists()) {
+                while (static::where('slug', $slug)->where('buku_wisuda_id', '!=', $model->buku_wisuda_id)->exists()) {
                     $slug = "{$originalSlug}-" . $count++;
                 }
                 $model->slug = $slug;
@@ -61,12 +61,12 @@ class BukuWisuda extends Model
 
     public function template()
     {
-        return $this->belongsTo(TemplateBukuWisuda::class, 'template_id', 'nama');
+        return $this->belongsTo(TemplateBukuWisuda::class, 'template_id', 'template_id');
     }
 
     public function wisudawan()
     {
-        return $this->hasMany(Wisudawan::class, 'id_buku');
+        return $this->hasMany(Wisudawan::class, 'buku_wisuda_id');
     }
 
     public function admin()

@@ -10,9 +10,7 @@ class TemplateBukuWisuda extends Model
     use HasFactory;
 
     protected $table = 'template_buku_wisuda';
-    protected $primaryKey = 'nama';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = 'template_id';
 
     protected $fillable = [
         'nama',

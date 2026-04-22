@@ -15,12 +15,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create default Admin account
-        \App\Models\Admin::create([
-            'name' => 'Admin Pertama',
-            'nip' => '123456789012345678',
-            'email' => 'admin@ar-raniry.ac.id',
-            'password' => bcrypt('password'),
-        ]);
+        \App\Models\Admin::updateOrCreate(
+            ['email' => 'admin@ar-raniry.ac.id'],
+            [
+                'name' => 'Admin Pertama',
+                'nip' => '123456789012345678',
+                'role' => 'system_admin',
+                'password' => bcrypt('password'),
+            ]
+        );
+
+        \App\Models\Admin::updateOrCreate(
+            ['email' => 'operator@ar-raniry.ac.id'], 
+            [
+                'name' => 'Operator Buku',
+                'nip' => '987654321098765432',
+                'role' => 'admin',
+                'password' => bcrypt('password'),
+            ]
+        );
     }
 }

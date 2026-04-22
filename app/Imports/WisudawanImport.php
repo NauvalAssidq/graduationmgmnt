@@ -92,7 +92,7 @@ class WisudawanImport extends DefaultValueBinder implements ToCollection, WithHe
                         'slug'           => Str::slug("Wisuda Gelombang $gelombang Tahun $tahun"),
                     ]
                 );
-                $booksCache[$bookKey] = $book->id;
+                $booksCache[$bookKey] = $book->buku_wisuda_id;
             }
 
             $bukuId = $booksCache[$bookKey];
@@ -100,7 +100,7 @@ class WisudawanImport extends DefaultValueBinder implements ToCollection, WithHe
             Wisudawan::updateOrCreate(
                 ['nim' => $nim],
                 [
-                    'id_buku'       => $bukuId,
+                    'buku_wisuda_id'=> $bukuId,
                     'nama'          => $nama,
                     'nomor'         => $nomor,
                     'ttl'           => $ttl,

@@ -10,9 +10,10 @@ class Wisudawan extends Model
     use HasFactory;
 
     protected $table = 'wisudawan';
+    protected $primaryKey = 'wisudawan_id';
 
     protected $fillable = [
-        'id_buku',
+        'buku_wisuda_id',
         'nama',
         'nim',
         'nomor',
@@ -28,6 +29,6 @@ class Wisudawan extends Model
 
     public function bukuWisuda()
     {
-        return $this->belongsTo(BukuWisuda::class, 'id_buku'); // relasi ke buku wisuda many to one
+        return $this->belongsTo(BukuWisuda::class, 'buku_wisuda_id'); // relasi ke buku wisuda many to one
     }
 }

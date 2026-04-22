@@ -92,6 +92,7 @@ class WisudawanSeeder extends Seeder
                 $book = BukuWisuda::firstOrCreate(
                     ['gelombang' => $gelombang, 'tahun' => $tahun],
                     [
+                        'admin_id' => 1,
                         'nama_buku' => "Wisuda Gelombang $gelombang Tahun $tahun",
                         'tanggal_terbit' => now(),
                         'status' => 'Draft',
@@ -99,11 +100,11 @@ class WisudawanSeeder extends Seeder
                         'file_pdf' => null
                     ]
                 );
-                $booksCache[$bookKey] = $book->id;
+                $booksCache[$bookKey] = $book->buku_wisuda_id;
             }
 
             Wisudawan::create([
-                'id_buku' => $booksCache[$bookKey],
+                'buku_wisuda_id' => $booksCache[$bookKey],
                 'nim' => $student['nim'],
                 'nama' => $student['nama'],
                 'nomor' => $student['nomor_ijazah'],
