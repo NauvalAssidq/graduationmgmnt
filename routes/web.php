@@ -34,7 +34,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     
     // Kelola Template
     Route::resource('template', TemplateController::class)->except(['index', 'show'])->middleware('system.admin');
-    Route::resource('template', TemplateController::class)->only(['index', 'show']);
+    Route::get('template', [TemplateController::class, 'index'])->name('template.index');
     
     // Kelola Arsip
     Route::get('/arsip', [ArsipController::class, 'index'])->name('admin.arsip.index');

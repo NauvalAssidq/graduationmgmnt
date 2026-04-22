@@ -155,14 +155,15 @@
                 padding: 2rem 0;
             }
             .a4-page, .sheet {
-                width: 210mm;
-                min-height: 297mm;
-                margin: 0 auto 2rem auto !important; /* Forced visual separation */
+                width: 210mm !important;
+                height: 297mm !important;
+                overflow: hidden !important;
+                margin: 0 auto 2rem auto !important;
                 background: white;
-                padding: 2.5cm; /* Match template preview */
-                box-sizing: border-box;
+                padding: 2.5cm !important;
+                box-sizing: border-box !important;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                position: relative;
+                position: relative !important;
             }
             .a4-page.center { padding: 0; }
             /* Visual page separator line */
@@ -261,6 +262,7 @@
                 // Determine Tag and Content
                 $tag = $pages[$i];
                 $content = $pages[$i+1] ?? '';
+                $additionalPages = '';
                 
                 // --- 1. TOC INJECTION ---
                 // Use strict check to avoid matching HTML comments (e.g. <!-- DAFTAR ISI -->) which belong to previous page
@@ -317,15 +319,11 @@
                              $content = substr_replace($content, $dynamicList, $insertionPoint, 0);
                          }
                      }
-                     
-                     // Append the additional pages AFTER the current page's closing div
-                     $content .= $additionalPages;
                 }
 
                 // --- 2. PAGINATION INJECTION ---
-                // Only if NOT Cover (Page 1) and NOT the Separator Pages (which are green)
-                // Actually user requested pagination on "html" template.
-                if ($pNum > 1) {
+                // Only inject if this page does NOT already have a hardcoded page number
+                if ($pNum > 1 && stripos($content, 'bottom: 1.5cm') === false) {
                      $suffix = match($pNum) { 2=>'ii', 3=>'iii', 4=>'iv', default=>$pNum };
                      $paginationDiv = '<div class="page-number" style="position: absolute; bottom: 1.5cm; left: 0; width: 100%; text-align: center; font-weight: bold; font-family: serif; color:black;">'.$suffix.'</div>';
                      
@@ -338,6 +336,12 @@
                 }
                 
                 $newHtml .= $tag . $content;
+                
+                // Append additional TOC pages AFTER the current page is fully built
+                if (!empty($additionalPages)) {
+                    $newHtml .= $additionalPages;
+                    $additionalPages = '';
+                }
                 $pNum++;
             }
             $book->template->cover_html = $newHtml;
@@ -368,6 +372,7 @@
     <!-- DATA PAGES (Graduate Lists) -->
     <!-- We need to loop through groupedGrads instead of flat list to make separators -->
     
+    @php $dataPageNum = 1; @endphp
     @foreach($groupedGrads as $faculty => $prodis)
         @foreach($prodis as $prodi => $grads)
              <!-- SEPARATOR PAGE -->
@@ -381,7 +386,8 @@
             </div>
         
             <!-- LISTING PAGE -->
-            <div class="a4-page sheet page-break {{ isset($isPdf) && $isPdf ? 'content-padding listing-page' : '' }}">
+            <div class="a4-page sheet {{ isset($isPdf) && $isPdf ? 'content-padding listing-page' : '' }}" style="position: relative;">
+                <div style="position: absolute; bottom: 1.5cm; left: 0; width: 100%; text-align: center; font-weight: bold; font-family: serif; color:black;">{{ $dataPageNum }}</div>
                 <h3 class="text-center font-bold text-xl uppercase mb-8 pb-4 border-b border-gray-300">
                     {{ $faculty }} <br> <span class="text-base text-gray-600">{{ $prodi }}</span>
                 </h3>
@@ -494,7 +500,7 @@
                                 <tr>
                                     <td class="align-top">Program Studi</td>
                                     <td class="align-top">:</td>
-                                    <td class="align-top">{{ $grad->prodi }}</td> <!-- PDFs list "S1 - ..." here usually, or plain name -->
+                                    <td class="align-top">{{ $grad->prodi }}</td>
                                 </tr>
                                 <tr>
                                     <td class="align-top">IPK / Yudisium</td>
@@ -512,15 +518,17 @@
                         </div>
                     </div>
                 @endif
-        
-                    <!-- Page Break Logic: 3 students per page max (applies to ALL modes) -->
+    
+                    <!-- Page Break Logic: 3 students per page max -->
                     @if($loop->iteration % 3 == 0 && !$loop->last)
-                        </div></div><div class="a4-page sheet" style="page-break-before: always;"><div class="space-y-6" style="padding-top: 0;">
+                        @php $dataPageNum++; @endphp
+                        </div></div><div class="a4-page sheet" style="position: relative; page-break-before: always;"><div style="position: absolute; bottom: 1.5cm; left: 0; width: 100%; text-align: center; font-weight: bold; font-family: serif; color:black;">{{ $dataPageNum }}</div><div class="space-y-6" style="padding-top: 0;">
                     @endif
                 @endforeach
                 </div>
             </div>
         @endforeach
+        @php $dataPageNum++; @endphp
     @endforeach
 
 </body>

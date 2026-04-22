@@ -11,7 +11,7 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-300 p-6">
-            <form action="{{ route('template.update', $template->nama) }}" method="POST" class="space-y-6">
+            <form action="{{ route('template.update', $template->template_id) }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')
 
