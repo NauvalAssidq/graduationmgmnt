@@ -62,7 +62,7 @@ class BukuWisudaController extends Controller
     {
         $validated = $request->validate([
             'nama_buku' => 'required|string|max:255',
-            'template_id' => 'nullable|string|exists:template_buku_wisuda,nama', // Added
+            'template_id' => 'nullable|integer|exists:template_buku_wisuda,template_id',
             'tanggal_terbit' => 'required|date',
             'gelombang' => 'required|string|max:50',
             'status' => 'required|in:Published,Draft,Archived',
@@ -90,7 +90,7 @@ class BukuWisudaController extends Controller
     {
         $validated = $request->validate([
             'nama_buku' => 'required|string|max:255',
-            'template_id' => 'nullable|string|exists:template_buku_wisuda,nama', // Added
+            'template_id' => 'nullable|integer|exists:template_buku_wisuda,template_id',
             'tanggal_terbit' => 'required|date',
             'gelombang' => 'required|string|max:50',
             'status' => 'required|in:Published,Draft,Archived',

@@ -25,7 +25,7 @@
                         <label for="template_id" class="block text-sm font-medium text-slate-700 mb-1">Template Layout (Optional)</label>
                         <x-select 
                             name="template_id" 
-                            :options="$templates->mapWithKeys(function ($t) { return [$t->nama => $t->nama . ' (' . $t->layout . ')']; })->toArray()" 
+                            :options="$templates->mapWithKeys(function ($t) { return [$t->template_id => $t->nama . ' (' . $t->layout . ')']; })->toArray()" 
                             :value="old('template_id')" 
                             placeholder="-- Pilih Template --"
                             class="w-full" 
