@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->integerIncrements('setting_id');
-            $table->string('key')->unique();
+            $table->unsignedInteger('admin_id');
+            $table->string('key');
             $table->text('value')->nullable();
             $table->timestamps();
+            $table->foreign('admin_id')->references('admin_id')->on('admin')->onDelete('cascade');
+            $table->unique(['admin_id', 'key']);
         });
     }
 

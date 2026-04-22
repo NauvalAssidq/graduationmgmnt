@@ -8,5 +8,10 @@ class Setting extends Model
 {
     protected $primaryKey = 'setting_id';
 
-    protected $fillable = ['key', 'value'];
+    protected $fillable = ['admin_id', 'key', 'value'];
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
+    }
 }

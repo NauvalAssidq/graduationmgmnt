@@ -31,4 +31,8 @@ class Admin extends Authenticatable
     {
         return $this->hasMany(BukuWisuda::class, 'admin_id');
     }
+    public function settings()
+    {
+        return $this->hasMany(Setting::class, 'admin_id');
+    }
 }
