@@ -65,8 +65,8 @@ class ArsipController extends Controller
         $html = view('admin.arsip.print_book', ['book' => $book, 'isPdf' => true])->render();
         
         \Spatie\Browsershot\Browsershot::html($html)
-            ->format('A4')
-            ->margins(0, 0, 0, 0)
+            ->format('A4') // Paper format
+            ->margins(0, 0, 0, 0) // Margin (top, right, bottom, left)
             ->showBackground()
             ->waitUntilNetworkIdle()
             ->save($fullPath);

@@ -29,6 +29,6 @@ class Wisudawan extends Model
 
     public function bukuWisuda()
     {
-        return $this->belongsTo(BukuWisuda::class, 'buku_wisuda_id'); // relasi ke buku wisuda many to one
+        return $this->belongsTo(BukuWisuda::class, 'buku_wisuda_id');
     }
 }

@@ -56,48 +56,44 @@ class AdminManagementController extends Controller
     }
 
     // Form edit admin
-    public function edit(Admin $admin_management)
+    public function edit(Admin $kelola_admin)
     {
-        return view('admin.admin_management.edit', ['admin' => $admin_management]);
+        return view('admin.admin_management.edit', ['admin' => $kelola_admin]);
     }
 
     // Update data admin
-    public function update(Request $request, Admin $admin_management)
+    public function update(Request $request, Admin $kelola_admin)
     {
-        $admin = $admin_management;
-
         $request->validate([
             'name'         => 'required|string|max:100',
-            'nip'          => 'nullable|string|size:18|unique:admin,nip,' . $admin->admin_id,
-            'email'        => 'required|email|unique:admin,email,' . $admin->admin_id,
+            'nip'          => 'nullable|string|size:18|unique:admin,nip,' . $kelola_admin->admin_id . ',admin_id',
+            'email'        => 'required|email|unique:admin,email,' . $kelola_admin->admin_id . ',admin_id',
             'new_password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        $admin->name  = $request->name;
-        $admin->nip   = $request->nip ?: null;
-        $admin->email = $request->email;
+        $kelola_admin->name  = $request->name;
+        $kelola_admin->nip   = $request->nip ?: null;
+        $kelola_admin->email = $request->email;
 
         if ($request->filled('new_password')) {
-            $admin->password = Hash::make($request->new_password);
+            $kelola_admin->password = Hash::make($request->new_password);
         }
 
-        $admin->save();
+        $kelola_admin->save();
 
         return redirect()->route('kelola-admin.index')
             ->with('success', 'Data admin berhasil diperbarui.');
     }
 
     // Hapus admin (tidak bisa hapus diri sendiri)
-    public function destroy(Admin $admin_management)
+    public function destroy(Admin $kelola_admin)
     {
-        $admin = $admin_management;
-
-        if ($admin->admin_id === Auth::id()) {
+        if ($kelola_admin->admin_id === Auth::id()) {
             return redirect()->route('kelola-admin.index')
                 ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
-        $admin->delete();
+        $kelola_admin->delete();
 
         return redirect()->route('kelola-admin.index')
             ->with('success', 'Admin berhasil dihapus.');

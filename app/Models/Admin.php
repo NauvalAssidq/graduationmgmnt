@@ -13,6 +13,11 @@ class Admin extends Authenticatable
     protected $table = 'admin';
     protected $primaryKey = 'admin_id';
 
+    public function getRouteKeyName(): string
+    {
+        return 'admin_id';
+    }
+
     // fillable yang diisi di form login/manajemen admin
     protected $fillable = [
         'name',
@@ -27,10 +32,14 @@ class Admin extends Authenticatable
         'password',
     ];
 
+
+    // History of creating and publishing books
     public function buku()
     {
         return $this->hasMany(BukuWisuda::class, 'admin_id');
     }
+
+    // History of changing settings
     public function settings()
     {
         return $this->hasMany(Setting::class, 'admin_id');

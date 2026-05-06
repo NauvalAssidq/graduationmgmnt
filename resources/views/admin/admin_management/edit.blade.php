@@ -12,7 +12,7 @@
         <h1 class="text-2xl font-bold text-slate-800">Edit Administrator</h1>
     </div>
 
-    <form action="{{ route('kelola-admin.update', $admin) }}" method="POST">
+    <form action="{{ route('kelola-admin.update', $admin->admin_id) }}" method="POST">
         @csrf
         @method('PUT')
 

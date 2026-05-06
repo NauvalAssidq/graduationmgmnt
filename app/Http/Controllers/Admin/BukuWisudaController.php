@@ -34,7 +34,7 @@ class BukuWisudaController extends Controller
             $query->where('tahun', $request->tahun);
         }
 
-        // Sort
+        // Sorting
         $sortBy = $request->input('sort_by', 'created_at');
         $sortOrder = $request->input('sort_order', 'desc');
         $allowedSorts = ['nama_buku', 'tahun', 'gelombang', 'status', 'created_at', 'tanggal_terbit', 'wisudawan_count'];
@@ -43,6 +43,7 @@ class BukuWisudaController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
+        // Paginate
         $books = $query->paginate(10)->withQueryString();
         
         // Get years for filter
