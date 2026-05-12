@@ -23,7 +23,6 @@
                 background: #ffffff; 
             }
             
-            /* Pages - fixed A4 height, no overflow */
             .a4-page, .sheet { 
                 width: 210mm !important; 
                 height: 297mm !important;
@@ -36,18 +35,15 @@
                 page-break-after: always;
                 page-break-inside: avoid;
             }
-            
-            /* Cover page - no padding */
+
             .a4-page.center { 
                 padding: 0 !important;
             }
             
-            /* SK Rektor page - reduced 1cm padding */
             .a4-page.sk-page, .sk-page {
                 padding: 1cm !important;
             }
             
-            /* Force background colors */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -60,14 +56,12 @@
     @endif
     <style>
         @media print {
-            /* Force borderless printing - remove ALL browser margins */
             @page { 
                 margin: 0mm !important; 
                 padding: 0mm !important;
-                size: 210mm 297mm; /* Explicit A4 size */
+                size: 210mm 297mm; 
             }
             
-            /* First page - no margin needed */
             @page :first {
                 margin: 0mm !important;
             }
@@ -84,12 +78,10 @@
                 color-adjust: exact !important; 
             }
             
-            /* Remove tailwind gray bg class */
             .bg-gray-100 { background-color: white !important; }
             
             .no-print { display: none !important; }
             
-            /* Pages - fixed A4 height, no overflow */
             .a4-page, .sheet { 
                 width: 210mm !important;
                 height: 297mm !important;
@@ -106,38 +98,32 @@
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
             }
-            
-            /* Cover page - no padding */
+
             .a4-page.center { 
                 padding: 0 !important;
             }
             
-            /* SK Rektor page - reduced 1cm padding */
             .a4-page.sk-page, .sk-page {
                 padding: 1cm !important;
             }
             
-            /* Separator pages - background support */
             .a4-page.sheet[style*="background-color"] {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
-            /* FORCE ALL BACKGROUND COLORS TO PRINT (including inline styles) */
             * {
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
                 color-adjust: exact !important;
             }
             
-            /* Specific Tailwind classes for print */
             .bg-emerald-700, .bg-emerald-800, .bg-gray-50, .bg-amber-400, .bg-uin-green, .bg-uin-gold, 
             .bg-gray-100, .bg-slate-100, .bg-green-700, .bg-yellow-400 {
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
             }
             
-            /* Force Separator Page Green Background */
             .separator-page {
                 background-color: #047857 !important;
                 color: white !important;
@@ -166,7 +152,6 @@
                 position: relative !important;
             }
             .a4-page.center { padding: 0; }
-            /* Visual page separator line */
             .a4-page::after, .sheet::after {
                 content: "";
                 position: absolute;
@@ -178,7 +163,6 @@
             }
         }
 
-        /* Custom CSS from Template */
         @if($book->template && $book->template->custom_css)
             {!! $book->template->custom_css !!}
         @endif
@@ -544,5 +528,53 @@
         @php $dataPageNum++; @endphp
     @endforeach
 
+    <!-- Pagination Script for Kata Pengantar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pagesToPaginate = document.querySelectorAll('.auto-paginate-page');
+            
+            pagesToPaginate.forEach(page => {
+                const container = page.querySelector('.paginate-container');
+                const content = page.querySelector('.paginate-content');
+                if (!container || !content) return;
+                
+                // Cek apakah konten melebihi lebar 1 kolom (160mm)
+                // Jika scrollWidth lebih besar dari clientWidth, berarti ada kolom ke-2, ke-3, dst.
+                let totalWidth = content.scrollWidth;
+                let viewWidth = container.clientWidth;
+                
+                // Jika tidak ada overflow, berarti cukup 1 halaman, hentikan proses.
+                if (totalWidth <= viewWidth + 10) return; 
+                
+                // Hitung total halaman yang dibutuhkan
+                // Setiap kolom baru melompat sejauh 210mm (karena gap 50mm + width 160mm)
+                let totalPages = Math.ceil(totalWidth / (viewWidth + 50)); // 50 is roughly the gap
+                
+                // page element in DOM is the original Page 1
+                let currentPage = page;
+                
+                for (let i = 1; i < totalPages; i++) {
+                    // Clone the A4 page
+                    let clone = page.cloneNode(true);
+                    
+                    // Update the transform to shift the columns left
+                    let cloneContent = clone.querySelector('.paginate-content');
+                    // Stride is exactly 210mm (1 A4 width)
+                    cloneContent.style.transform = `translateX(-${i * 210}mm)`;
+                    
+                    // Update page number if exists
+                    let pageNumDiv = clone.querySelector('.page-number');
+                    if (pageNumDiv) {
+                        // Jika ingin menghapus nomor halaman untuk halaman sambutan tambahan
+                        pageNumDiv.innerHTML = ''; 
+                    }
+                    
+                    // Insert the cloned page after the current page
+                    currentPage.parentNode.insertBefore(clone, currentPage.nextSibling);
+                    currentPage = clone;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
