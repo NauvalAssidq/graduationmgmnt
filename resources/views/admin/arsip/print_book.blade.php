@@ -207,6 +207,19 @@
         $usageHtml = $book->template->cover_html ?? '';
         
         if ($usageHtml) {
+            // Dynamic variable replacements
+            $replacements = [
+                '[GELOMBANG]' => $book->gelombang ?? '',
+                '[TAHUN]' => $book->tahun ?? '',
+                '[TAHUN_AKADEMIK]' => $book->tahun_akademik ?? '',
+                '[NOMOR_SK]' => $book->nomor_sk ?? '',
+                '[TANGGAL_SK]' => $book->tanggal_sk ? \Carbon\Carbon::parse($book->tanggal_sk)->locale('id')->translatedFormat('d F Y') : '',
+                '[NAMA_REKTOR]' => $book->nama_rektor ?? '',
+                '[NIP_REKTOR]' => $book->nip_rektor ?? '',
+                '[SAMBUTAN_REKTOR]' => $book->sambutan_rektor ?? '',
+            ];
+            $usageHtml = str_replace(array_keys($replacements), array_values($replacements), $usageHtml);
+
             // Split by sheet/a4-page tags. 
             // PREG_SPLIT_DELIM_CAPTURE: Returns the delimiters (tags) in the array.
             // We remove PREG_SPLIT_NO_EMPTY to keep indices predictable (Text, Tag, Text, Tag, Text).

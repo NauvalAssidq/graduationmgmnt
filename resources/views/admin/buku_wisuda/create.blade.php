@@ -53,9 +53,50 @@
                     </div>
 
                     <div>
-                        <label for="tahun" class="block text-sm font-medium text-slate-700 mb-1">Tahun Akademik</label>
+                        <label for="tahun" class="block text-sm font-medium text-slate-700 mb-1">Tahun (Misal: 2026)</label>
                         <input type="number" name="tahun" id="tahun" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('tahun', date('Y')) }}" min="2000" max="{{ date('Y')+1 }}" required>
                         @error('tahun') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label for="tahun_akademik" class="block text-sm font-medium text-slate-700 mb-1">Tahun Akademik</label>
+                        <input type="text" name="tahun_akademik" id="tahun_akademik" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('tahun_akademik') }}" placeholder="Contoh: 2025/2026">
+                        @error('tahun_akademik') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <hr class="my-2 border-gray-200">
+                        <h3 class="text-sm font-semibold text-slate-700 mb-2">Informasi SK & Rektor</h3>
+                    </div>
+
+                    <div>
+                        <label for="nomor_sk" class="block text-sm font-medium text-slate-700 mb-1">Nomor SK</label>
+                        <input type="text" name="nomor_sk" id="nomor_sk" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('nomor_sk') }}" placeholder="Contoh: B-087/Un.08/R/PP.00.9/03/2026">
+                        @error('nomor_sk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label for="tanggal_sk" class="block text-sm font-medium text-slate-700 mb-1">Tanggal SK / Penetapan</label>
+                        <input type="date" name="tanggal_sk" id="tanggal_sk" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('tanggal_sk') }}">
+                        @error('tanggal_sk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label for="nama_rektor" class="block text-sm font-medium text-slate-700 mb-1">Nama Rektor</label>
+                        <input type="text" name="nama_rektor" id="nama_rektor" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('nama_rektor') }}" placeholder="Contoh: Prof. Dr. H. Mujiburrahman, M.Ag">
+                        @error('nama_rektor') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label for="nip_rektor" class="block text-sm font-medium text-slate-700 mb-1">NIP Rektor</label>
+                        <input type="text" name="nip_rektor" id="nip_rektor" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" value="{{ old('nip_rektor') }}" placeholder="Contoh: 19710908 199903 1 004">
+                        @error('nip_rektor') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="sambutan_rektor" class="block text-sm font-medium text-slate-700 mb-1">Kata Pengantar / Sambutan Rektor</label>
+                        <textarea name="sambutan_rektor" id="sambutan_rektor" rows="12" class="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 text-sm" placeholder="Masukkan isi sambutan rektor di sini.">{{ old('sambutan_rektor') }}</textarea>
+                        @error('sambutan_rektor') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
@@ -79,3 +120,17 @@
             </form>
     </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.tiny.cloud/1/{{ config('services.tinymce.key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#sambutan_rektor',
+        plugins: 'advlist autolink lists link charmap preview searchreplace visualblocks code fullscreen insertdatetime table wordcount',
+        toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+        menubar: false,
+        branding: false,
+        height: 300
+    });
+</script>
+@endpush

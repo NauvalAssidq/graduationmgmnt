@@ -68,6 +68,12 @@ class BukuWisudaController extends Controller
             'gelombang' => 'required|string|max:50',
             'status' => 'required|in:Published,Draft,Archived',
             'tahun' => 'required|integer|min:2000|max:'.(date('Y')+1),
+            'tahun_akademik' => 'nullable|string|max:50',
+            'nomor_sk' => 'nullable|string|max:255',
+            'tanggal_sk' => 'nullable|date',
+            'nama_rektor' => 'nullable|string|max:255',
+            'nip_rektor' => 'nullable|string|max:255',
+            'sambutan_rektor' => 'nullable|string',
             'file_pdf' => 'nullable|file|mimes:pdf|max:20480', // Max 20MB
         ]);
 
@@ -96,6 +102,12 @@ class BukuWisudaController extends Controller
             'gelombang' => 'required|string|max:50',
             'status' => 'required|in:Published,Draft,Archived',
             'tahun' => 'required|integer|min:2000|max:'.(date('Y')+1),
+            'tahun_akademik' => 'nullable|string|max:50',
+            'nomor_sk' => 'nullable|string|max:255',
+            'tanggal_sk' => 'nullable|date',
+            'nama_rektor' => 'nullable|string|max:255',
+            'nip_rektor' => 'nullable|string|max:255',
+            'sambutan_rektor' => 'nullable|string',
             'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
         ]);
 

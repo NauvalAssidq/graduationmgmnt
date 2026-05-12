@@ -21,6 +21,12 @@ class BukuWisuda extends Model
         'gelombang',
         'status',
         'tahun',
+        'tahun_akademik',
+        'nomor_sk',
+        'tanggal_sk',
+        'nama_rektor',
+        'nip_rektor',
+        'sambutan_rektor',
         'file_pdf',
     ];
 
